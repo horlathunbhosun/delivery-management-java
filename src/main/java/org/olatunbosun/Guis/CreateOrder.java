@@ -1,10 +1,6 @@
 package org.olatunbosun.Guis;
 
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-import org.olatunbosun.Utility;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +30,7 @@ public class CreateOrder extends JFrame {
         JPanel contentPane = new JPanel();
 
 
+        MenuGui menu = new MenuGui();
 
 
         // Create the text fields
@@ -147,6 +144,7 @@ public class CreateOrder extends JFrame {
 
 
 
+        setJMenuBar(menu);
 
         setContentPane(contentPane);
 

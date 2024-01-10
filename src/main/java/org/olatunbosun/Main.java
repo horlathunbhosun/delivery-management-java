@@ -10,10 +10,10 @@ public class Main {
 
     public static void main(String[] arg){
 //        new WelcomeScreenGui();
-        new CreateOrder();
+//        new CreateOrder();
 //        MenuClass  swingMenuDemo = new MenuClass();
 //        swingMenuDemo.showMenuDemo();
-//        new RegistrationGui();
+        new RegistrationGui();
 //        new WelcomeScreenGui();
 //           new ProfileGui();
 
