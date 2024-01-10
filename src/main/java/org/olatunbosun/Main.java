@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] arg){
 //        new WelcomeScreenGui();
-        new ListOrderGui();
+        new CreateOrder();
 //        MenuClass  swingMenuDemo = new MenuClass();
 //        swingMenuDemo.showMenuDemo();
 //        new RegistrationGui();
