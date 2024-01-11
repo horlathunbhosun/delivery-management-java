@@ -127,8 +127,6 @@ public class RegistrationGui extends JFrame  implements ActionListener {
         registerButton.setBorderPainted(false);
         registerButton.setBounds(120, 400, 150, 40);
 
-
-
         loginButtonLabel = Utility.createClickableLinkLabel("If registered? Sign in");
         loginButtonLabel.setBounds(120, 450, 150, 40);
 
