@@ -1,15 +1,15 @@
 package org.olatunbosun.Guis;
 
 import org.olatunbosun.Utility;
+import org.olatunbosun.controllers.LoginController;
+import org.olatunbosun.controllers.RegistrationController;
+import org.olatunbosun.models.LoginModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
-public class LoginScreenGui extends JFrame  {
+public class LoginScreenGui extends JFrame implements ActionListener {
 
     JTextField email;
     JPasswordField passwordField;
@@ -59,7 +59,7 @@ public class LoginScreenGui extends JFrame  {
         loginButton.setOpaque(true);
         loginButton.setBorderPainted(false);
         loginButton.setBounds(120, 230, 150, 40);
-
+        loginButton.addActionListener(this);
 
         registrationButtonLabel = Utility.createClickableLinkLabel("If not registered? Sign up");
         registrationButtonLabel.setBounds(120, 300, 150, 40);
@@ -87,5 +87,72 @@ public class LoginScreenGui extends JFrame  {
         setVisible(true);
         pack();
         setSize(600, 600);
+    }
+
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == loginButton) {
+            boolean isValid = validation();
+
+            // Check if the validation passed
+            if (!isValid) {
+                return;
+            }
+
+            // Get the email and password
+            String emailText = email.getText();
+            String passwordText = String.valueOf(passwordField.getPassword());
+
+            // Create a login model object
+            LoginModel loginModel = new LoginModel(emailText, passwordText);
+
+            // Call the login controller
+            String response =  LoginController.Login(loginModel);
+
+            // Check the result and show appropriate message
+            if (response.equals("Login Successful")) {
+                // Show success message
+                JOptionPane.showMessageDialog(null, response, "Success", JOptionPane.INFORMATION_MESSAGE);
+                // Go to the next screen
+                new CreateOrderGui();
+                // Close the current screen
+                dispose();
+            } else {
+                // Show error message
+                JOptionPane.showMessageDialog(null, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+
+
+    public boolean validation() {
+        boolean isValid = true;
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (email.getText().isEmpty() || String.valueOf(passwordField.getPassword()).isEmpty()) {
+            errorMessage.append("All Fields Are Required\n");
+            isValid = false;
+        }
+
+        //validate email is in the right format
+        if (!Utility.validateEmail(email.getText())) {
+            errorMessage.append("Email is not in the right format\n");
+            isValid = false;
+        }
+
+        // Display the first error encountered, if any
+        if (!isValid) {
+            JOptionPane.showMessageDialog(this, errorMessage.toString().trim(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return isValid;
+
     }
 }

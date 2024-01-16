@@ -31,11 +31,15 @@ public class LoginController {
                         if (passwordCheck) {
                             System.out.println("Authentication successful");
                             SessionData sessionData = new SessionData();
-
-                            SessionManager.createSession(loginModel.getEmail(), sessionData);
-
+                            sessionData.setUserId(resultSet.getInt("id"));
+                            sessionData.setEmail(resultSet.getString("email"));
+                            sessionData.setFullName(resultSet.getString("fullname"));
+                            sessionData.setRole(resultSet.getString("role"));
+                            sessionData.setPhoneNumber(resultSet.getString("phone_number"));
+                            sessionData.setTruckNumber(resultSet.getString("truck_number"));
+                            sessionData.setTruckCapacity(resultSet.getString("truck_capacity"));
+                            SessionManager.createSession("userInfo", sessionData);
                             return "Login Successful";
-
                         } else {
                             System.out.println("Authentication failed");
                             return "Login Failed incorrect password";
