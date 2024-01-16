@@ -25,7 +25,7 @@ public class RegistrationController {
                 preparedStatement.setString(4, registration.getPhoneNumber());
                 preparedStatement.setString(5, registration.getRole());
                 preparedStatement.setString(6, registration.getTruckNumber());
-                preparedStatement.setString(7, registration.getTruckCapacity());
+                preparedStatement.setString(7, registration.getTruckCapacity() + "kg");
                 preparedStatement.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
 
                 // Execute the statement

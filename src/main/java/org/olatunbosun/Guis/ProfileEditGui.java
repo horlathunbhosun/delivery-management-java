@@ -4,9 +4,12 @@ import org.olatunbosun.Utility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.*;
 
-public class ProfileGui extends JFrame  implements ActionListener {
+public class ProfileEditGui extends JFrame  implements ActionListener {
+
+
     JTextField fullName,email, phoneNumber, truckNumber, truckCapacity;
     JPasswordField passwordField;
     JLabel fullNameLabel, emailLabel, passwordLabel,phoneNumberLabel, roleFieldLabel, truckNumberLabel, truckCapacityLabel, loginButtonLabel, titleLabel;
@@ -16,7 +19,7 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
     JButton registerButton;
 
-    public ProfileGui(){
+    public ProfileEditGui(){
         super("Edit Page");
 
         // Create an instance of the Menu class
@@ -28,14 +31,14 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
 
         // Create the text fields
-         fullNameLabel = new JLabel("FullName:");
-         fullNameLabel.setBounds(10, 50, 100, 50);
+        fullNameLabel = new JLabel("FullName:");
+        fullNameLabel.setBounds(10, 50, 100, 50);
 
 
-         emailLabel = new JLabel("Email:");
+        emailLabel = new JLabel("Email:");
         emailLabel.setBounds(10, 100, 120, 50);
 
-         passwordLabel = new JLabel("Password: ");
+        passwordLabel = new JLabel("Password: ");
         passwordLabel.setBounds(10, 150, 140, 50);
 
         phoneNumberLabel = new JLabel("Phone Number: ");
@@ -162,20 +165,4 @@ public class ProfileGui extends JFrame  implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
     }
-
-
-    // Helper method to scale an Image
-//    private static Image getScaledImage(Image srcImg, int width, int height) {
-//        BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D g2d = resizedImg.createGraphics();
-//
-//        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-//        g2d.drawImage(srcImg, 0, 0, width, height, null);
-//        g2d.dispose();
-//
-//        return resizedImg;
-//    }
-
-
-
 }
