@@ -3,6 +3,8 @@ package org.olatunbosun;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utility {
 
@@ -28,4 +30,36 @@ public class Utility {
 
         return resizedImg;
     }
+
+
+    public static boolean validateEmail(String email) {
+        // Define the regex pattern for a valid email address
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(emailRegex);
+
+        // Create a matcher with the given email
+        Matcher matcher = pattern.matcher(email);
+
+        // Return true if the email matches the pattern, otherwise false
+        return matcher.matches();
+    }
+
+
+    public static boolean validatePassword(String password) {
+        // Define the regex pattern for a valid password
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
+
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(passwordRegex);
+
+        // Create a matcher with the given password
+        Matcher matcher = pattern.matcher(password);
+
+        // Return true if the password matches the pattern, otherwise false
+        return matcher.matches();
+    }
+
+
 }

@@ -1,11 +1,14 @@
 package org.olatunbosun.Guis;
 
 import org.olatunbosun.Utility;
+import org.olatunbosun.controllers.RegistrationController;
+import org.olatunbosun.models.Registration;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class RegistrationGui extends JFrame  implements ActionListener {
     JTextField fullName,email, phoneNumber, truckNumber, truckCapacity;
@@ -67,32 +70,32 @@ public class RegistrationGui extends JFrame  implements ActionListener {
 
 
         fullName = new JTextField();
-        fullName.setBounds(120, 50, 250, 50);
+        fullName.setBounds(120, 50, 400, 50);
 
 
         email = new JTextField();
-        email.setBounds(120, 100, 250, 50);
+        email.setBounds(120, 100, 400, 50);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(120, 150, 250, 50);
+        passwordField.setBounds(120, 150, 400, 50);
 
 
         phoneNumber = new JTextField();
-        phoneNumber.setBounds(120, 200, 250, 50);
+        phoneNumber.setBounds(120, 200, 400, 50);
 
         String[] rolesList = { "Customer", "Scheduler", "Driver" };
 
 
         truckNumber = new JTextField();
-        truckNumber.setBounds(120, 300, 250, 50);
+        truckNumber.setBounds(120, 300, 400, 50);
         truckNumber.setVisible(false);
 
         truckCapacity = new JTextField();
-        truckCapacity.setBounds(120, 350, 250, 50);
+        truckCapacity.setBounds(120, 350, 400, 50);
         truckCapacity.setVisible(false);
 
         roles = new JComboBox<>(rolesList);
-        roles.setBounds(120, 250, 250, 50);
+        roles.setBounds(120, 250, 400, 50);
         roles.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -121,7 +124,10 @@ public class RegistrationGui extends JFrame  implements ActionListener {
         ImageIcon sizedIcon = new ImageIcon(Utility.getScaledImage(icon.getImage(), iconWidth, iconHeight));
 
         System.out.println(icon);
+
         registerButton = new JButton("Register",sizedIcon);
+        Font boldFont = new Font(registerButton.getFont().getFamily(), Font.BOLD, registerButton.getFont().getSize());
+        registerButton.setFont(boldFont);
         registerButton.setBackground(new Color(0, 158, 15));
         registerButton.setOpaque(true);
         registerButton.setBorderPainted(false);
@@ -157,7 +163,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
 
         setVisible(true);
         pack();
-        setSize(400, 600);
+        setSize(600, 600);
     }
 
     /**
@@ -167,20 +173,87 @@ public class RegistrationGui extends JFrame  implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == registerButton) {
+          boolean isValid  =  validation();
+            if (!isValid) {
+                return;
+            }
+
+            String role = roles.getSelectedItem().toString();
+            if (role.equals("Driver")) {
+                role = "driver";
+            } else if (role.equals("Scheduler")) {
+                role = "scheduler";
+            } else {
+                role = "customer";
+            }
+
+            String truckNum = truckNumber.getText();
+            String truckCap = truckCapacity.getText();
+            if (truckNum.isEmpty()) {
+                truckNum = "null";
+            }
+            if (truckCap.isEmpty()) {
+                truckCap = "null";
+            }
+            //pass the data to the registration model constructor
+            Registration registration = new Registration(fullName.getText(), email.getText(), new String(passwordField.getPassword()), phoneNumber.getText(), role, truckNum, truckCap);
+//            String[] data = {fullName.getText(), email.getText(), passwordField.getPassword(), phoneNumber.getText(), role, truckNum, truckCap};
+            System.out.println(registration);
+
+            //save the data to the database
+//            registration.save();
+
+          String response =  RegistrationController.insertData(registration);
+
+            // Check the result and show appropriate message
+            if (response.equals("Registration Successful")) {
+                JOptionPane.showMessageDialog(null, "Data inserted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                new LoginScreenGui();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
 
     }
 
 
-    public void validation() {
+    public boolean validation() {
+        boolean isValid = true;
+        StringBuilder errorMessage = new StringBuilder();
 
-        if (fullName.getText().isEmpty() || passwordField.getText().isEmpty() || email.getText().isEmpty() || phoneNumber.getText().isEmpty() || roles.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this, "All Fields Are Required");
+        if (fullName.getText().isEmpty() || String.valueOf(passwordField.getPassword()).isEmpty() || email.getText().isEmpty() || phoneNumber.getText().isEmpty() || roles.getSelectedItem() == null) {
+            errorMessage.append("All Fields Are Required\n");
+            isValid = false;
         }
 
         if (roles.getSelectedItem().equals("Driver") && (truckNumber.getText().isEmpty() || truckCapacity.getText().isEmpty())) {
-            JOptionPane.showMessageDialog(this, "You need to fill in the truck number and capacity");
+            errorMessage.append("You need to fill in the truck number and capacity\n");
+            isValid = false;
         }
+
+        //validate email is in the right format
+        if (!Utility.validateEmail(email.getText())) {
+            errorMessage.append("Email is not in the right format\n");
+            isValid = false;
+        }
+
+        //validate password is in the right format
+        if (!Utility.validatePassword(String.valueOf(passwordField.getPassword()))) {
+            errorMessage.append("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character\n");
+            isValid = false;
+        }
+        // Display the first error encountered, if any
+        if (!isValid) {
+            JOptionPane.showMessageDialog(this, errorMessage.toString().trim(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return isValid;
+
     }
+
 
 
     // Helper method to scale an Image

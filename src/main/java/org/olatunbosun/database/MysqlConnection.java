@@ -1,8 +1,7 @@
 package org.olatunbosun.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class MysqlConnection {
 
@@ -10,7 +9,7 @@ public class MysqlConnection {
         Connection connection = null;
         try {
             // Load the JDBC driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Provide the database URL, username, and password
             String url = "jdbc:mysql://localhost:3306/deliver_management";
@@ -22,7 +21,7 @@ public class MysqlConnection {
 
             System.out.println("Connected to the database!");
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;

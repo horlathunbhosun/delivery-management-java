@@ -86,6 +86,6 @@ public class LoginScreenGui extends JFrame  {
 
         setVisible(true);
         pack();
-        setSize(400, 600);
+        setSize(600, 600);
     }
 }
