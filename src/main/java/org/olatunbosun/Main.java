@@ -13,8 +13,8 @@ public class Main {
 //        new CreateOrder();
 //        MenuClass  swingMenuDemo = new MenuClass();
 //        swingMenuDemo.showMenuDemo();
-        new RegistrationGui();
-//        new WelcomeScreenGui();
+//        new RegistrationGui();
+        new WelcomeScreenGui();
 //           new ProfileGui();
 
     }

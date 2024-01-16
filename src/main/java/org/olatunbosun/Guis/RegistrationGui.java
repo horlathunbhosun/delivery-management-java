@@ -126,7 +126,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
         registerButton.setOpaque(true);
         registerButton.setBorderPainted(false);
         registerButton.setBounds(120, 400, 150, 40);
-
+        registerButton.addActionListener(this);
         loginButtonLabel = Utility.createClickableLinkLabel("If registered? Sign in");
         loginButtonLabel.setBounds(120, 450, 150, 40);
 
@@ -168,6 +168,18 @@ public class RegistrationGui extends JFrame  implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+
+    public void validation() {
+
+        if (fullName.getText().isEmpty() || passwordField.getText().isEmpty() || email.getText().isEmpty() || phoneNumber.getText().isEmpty() || roles.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "All Fields Are Required");
+        }
+
+        if (roles.getSelectedItem().equals("Driver") && (truckNumber.getText().isEmpty() || truckCapacity.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(this, "You need to fill in the truck number and capacity");
+        }
     }
 
 
