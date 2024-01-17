@@ -19,10 +19,10 @@ public class Main {
 //        MenuClass  swingMenuDemo = new MenuClass();
 //        swingMenuDemo.showMenuDemo();
 //        new RegistrationGui();
-//        new WelcomeScreenGui();
+        new WelcomeScreenGui();
 
 //        new CreateOrderGui();
-       new ListDriversInfo();
+//       new ListDriversInfo();
 //       new AiGui();
 //       new DeliverablesOrdersGui();
 //        Connection connection = getConnection();
