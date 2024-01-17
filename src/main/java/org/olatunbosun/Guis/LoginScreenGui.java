@@ -120,7 +120,7 @@ public class LoginScreenGui extends JFrame implements ActionListener {
                 // Show success message
                 JOptionPane.showMessageDialog(null, response, "Success", JOptionPane.INFORMATION_MESSAGE);
                 // Go to the next screen
-                new CreateOrderGui();
+                new HomeGui();
                 // Close the current screen
                 dispose();
             } else {

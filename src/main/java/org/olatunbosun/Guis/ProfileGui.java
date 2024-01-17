@@ -19,7 +19,7 @@ public class ProfileGui extends JFrame  implements ActionListener {
     JButton registerButton;
 
     public ProfileGui(){
-        super("Edit Page");
+        super("Profile Page");
 
 
 
@@ -39,36 +39,31 @@ public class ProfileGui extends JFrame  implements ActionListener {
          fullNameLabel = new JLabel("FullName:");
          fullNameLabel.setBounds(10, 50, 100, 50);
 
-
          emailLabel = new JLabel("Email:");
-        emailLabel.setBounds(10, 100, 120, 50);
-
-         passwordLabel = new JLabel("Password: ");
-        passwordLabel.setBounds(10, 150, 140, 50);
+         emailLabel.setBounds(10, 100, 120, 50);
 
         phoneNumberLabel = new JLabel("Phone Number: ");
-        phoneNumberLabel.setBounds(10, 200, 160, 50);
+        phoneNumberLabel.setBounds(10, 150, 160, 50);
 
 
 
         roleFieldLabel = new JLabel("Role: ");
-        roleFieldLabel.setBounds(10, 250, 170, 50);
+        roleFieldLabel.setBounds(10, 200, 170, 50);
 
 
 
         truckNumberLabel = new JLabel("Truck Number: ");
-        truckNumberLabel.setBounds(10, 300, 170, 50);
+        truckNumberLabel.setBounds(10, 250, 170, 50);
         truckNumberLabel.setVisible(false);
 
 
         truckCapacityLabel = new JLabel("Truck Capacity(kg): ");
-        truckCapacityLabel.setBounds(10, 350, 170, 50);
+        truckCapacityLabel.setBounds(10, 250, 170, 50);
         truckCapacityLabel.setVisible(false);
 
 
         contentPane.add(fullNameLabel);
         contentPane.add(emailLabel);
-        contentPane.add(passwordLabel);
         contentPane.add(phoneNumberLabel);
         contentPane.add(roleFieldLabel);
         contentPane.add(truckNumberLabel);
@@ -90,7 +85,7 @@ public class ProfileGui extends JFrame  implements ActionListener {
         phoneNumber.setBounds(120, 200, 250, 50);
         phoneNumber.setText(sessionData.getPhoneNumber());
         phoneNumber.setEditable(false);
-        String[] rolesList = { "Customer", "Scheduler", "Driver" };
+        String[] rolesList = { "customer", "scheduler", "driver" };
 
 
         truckNumber = new JTextField();
@@ -103,20 +98,22 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
         roles = new JComboBox<>(rolesList);
         roles.setBounds(120, 250, 250, 50);
+        System.out.println(sessionData.getRole());
         roles.setSelectedItem(sessionData.getRole());
-        roles.setEditable(false);
-        if (roles.getSelectedItem() == "Driver") {
-            truckNumberLabel.setVisible(true);
-            truckCapacityLabel.setVisible(true);
-            truckCapacity.setVisible(true);
-            truckNumber.setVisible(true);
-            truckNumber.setText(sessionData.getTruckNumber());
-            truckCapacity.setText(sessionData.getTruckCapacity());
-        }
+        roles.setEnabled(false);
+        // Set a custom renderer to display the selected item
+        roles.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value.toString());
+                return this;
+            }
+        });
+
 
         contentPane.add(fullName);
         contentPane.add(email);
-        contentPane.add(passwordField);
         contentPane.add(phoneNumber);
         contentPane.add(roles);
         contentPane.add(truckNumber);

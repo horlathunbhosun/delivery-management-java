@@ -1,5 +1,8 @@
 package org.olatunbosun.Guis;
 
+import org.olatunbosun.session.SessionData;
+import org.olatunbosun.session.SessionManager;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +15,11 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
     public MenuGui(){
 
+
         homeMenu = new JMenu("Home");
         profileMenu = new JMenu("Profile");
+
+
         ordersMenu = new JMenu("Orders");
         missionOverviewMenu = new JMenu("Mission Overview");
         driversMenu = new JMenu("Drivers");
@@ -46,7 +52,29 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
 //         horizontalBox = Box.createHorizontalBox();
 
+        //add session manager to the frame
+        SessionData sessionData = SessionManager.getSession("userInfo");
+        String userRole = sessionData.getRole();
+        if (userRole.equals("customer")){
+            profileMenu.setVisible(true);
+            ordersMenu.setVisible(true);
+            missionOverviewMenu.setVisible(false);
+            driversMenu.setVisible(false);
 
+        }
+        if (userRole.equals("scheduler")){
+            profileMenu.setVisible(false);
+            ordersMenu.setVisible(false);
+            missionOverviewMenu.setVisible(true);
+            driversMenu.setVisible(false);
+        }
+
+        if (userRole.equals("driver")){
+            profileMenu.setVisible(false);
+            ordersMenu.setVisible(false);
+            missionOverviewMenu.setVisible(false);
+            driversMenu.setVisible(true);
+        }
         add(homeMenu);
         add(profileMenu);
         add(ordersMenu);

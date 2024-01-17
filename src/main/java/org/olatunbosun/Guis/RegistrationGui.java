@@ -83,7 +83,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
         phoneNumber = new JTextField();
         phoneNumber.setBounds(120, 200, 400, 50);
 
-        String[] rolesList = { "Customer", "Scheduler", "Driver" };
+        String[] rolesList = { "customer", "scheduler", "driver" };
 
 
         truckNumber = new JTextField();
@@ -99,7 +99,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
         roles.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if ("Driver".equals(roles.getSelectedItem())) {
+                if ("driver".equals(roles.getSelectedItem())) {
                     truckNumberLabel.setVisible(true);
                     truckCapacityLabel.setVisible(true);
                     truckNumber.setVisible(true);
@@ -180,9 +180,9 @@ public class RegistrationGui extends JFrame  implements ActionListener {
             }
 
             String role = roles.getSelectedItem().toString();
-            if (role.equals("Driver")) {
+            if (role.equals("driver")) {
                 role = "driver";
-            } else if (role.equals("Scheduler")) {
+            } else if (role.equals("scheduler")) {
                 role = "scheduler";
             } else {
                 role = "customer";
