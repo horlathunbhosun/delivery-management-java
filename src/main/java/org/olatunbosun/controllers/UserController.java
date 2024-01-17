@@ -6,6 +6,7 @@ import org.olatunbosun.models.LoginModel;
 import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,6 +42,7 @@ public class UserController {
                         row.add(email);
                         row.add(truckNumber);
                         row.add(truckCapacity);
+                        row.add(id);
                         userData.add(row);
                     }
 
@@ -55,6 +57,10 @@ public class UserController {
             return null; // or return an empty Vector if you prefer
         }
     }
+
+
+
+
 
 
 }

@@ -25,7 +25,7 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
 
     public CreateOrderGui(){
-        setTitle("Two Section GUI");
+        setTitle("Create Order");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
