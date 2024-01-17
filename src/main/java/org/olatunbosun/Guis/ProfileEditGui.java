@@ -1,6 +1,8 @@
 package org.olatunbosun.Guis;
 
 import org.olatunbosun.Utility;
+import org.olatunbosun.session.SessionData;
+import org.olatunbosun.session.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +27,8 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
         // Create an instance of the Menu class
         MenuGui menu = new MenuGui();
 
+        //add session manager to the frame
+       SessionData sessionData = SessionManager.getSession("userInfo");
 
         // Add the components to the frame
         JPanel contentPane = new JPanel();
@@ -72,18 +76,16 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
 
         fullName = new JTextField();
         fullName.setBounds(120, 50, 250, 50);
+        fullName.setText(sessionData.getFullName());
 
 
         email = new JTextField();
         email.setBounds(120, 100, 250, 50);
-
-        passwordField = new JPasswordField();
-        passwordField.setBounds(120, 150, 250, 50);
-
+        email.setText(sessionData.getEmail());
 
         phoneNumber = new JTextField();
         phoneNumber.setBounds(120, 200, 250, 50);
-
+        phoneNumber.setText(sessionData.getPhoneNumber());
         String[] rolesList = { "Customer", "Scheduler", "Driver" };
 
 
@@ -97,6 +99,7 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
 
         roles = new JComboBox<>(rolesList);
         roles.setBounds(120, 250, 250, 50);
+        roles.setSelectedItem(sessionData.getRole());
         roles.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {

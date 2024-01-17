@@ -1,6 +1,8 @@
 package org.olatunbosun.Guis;
 
 import org.olatunbosun.Utility;
+import org.olatunbosun.session.SessionData;
+import org.olatunbosun.session.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,12 +21,18 @@ public class ProfileGui extends JFrame  implements ActionListener {
     public ProfileGui(){
         super("Edit Page");
 
+
+
+
         // Create an instance of the Menu class
         MenuGui menu = new MenuGui();
 
 
         // Add the components to the frame
         JPanel contentPane = new JPanel();
+        //add session manager to the frame
+        SessionData sessionData = SessionManager.getSession("userInfo");
+
 
 
         // Create the text fields
@@ -69,18 +77,19 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
         fullName = new JTextField();
         fullName.setBounds(120, 50, 250, 50);
-
+        fullName.setText(sessionData.getFullName());
+        fullName.setEditable(false);
 
         email = new JTextField();
         email.setBounds(120, 100, 250, 50);
-
-        passwordField = new JPasswordField();
-        passwordField.setBounds(120, 150, 250, 50);
+        email.setText(sessionData.getEmail());
+        email.setEditable(false);
 
 
         phoneNumber = new JTextField();
         phoneNumber.setBounds(120, 200, 250, 50);
-
+        phoneNumber.setText(sessionData.getPhoneNumber());
+        phoneNumber.setEditable(false);
         String[] rolesList = { "Customer", "Scheduler", "Driver" };
 
 
@@ -94,41 +103,16 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
         roles = new JComboBox<>(rolesList);
         roles.setBounds(120, 250, 250, 50);
-        roles.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if ("Driver".equals(roles.getSelectedItem())) {
-                    truckNumberLabel.setVisible(true);
-                    truckCapacityLabel.setVisible(true);
-                    truckNumber.setVisible(true);
-                    truckCapacity.setVisible(true);
-                } else {
-                    truckNumberLabel.setVisible(false);
-                    truckCapacityLabel.setVisible(false);
-                    truckCapacity.setVisible(false);
-                    truckNumber.setVisible(false);
-                }
-            }
-
-        });
-
-
-
-        ImageIcon icon = new ImageIcon("src/main/resources/images/arrow-right-to-bracket_1.png");
-        // Set the desired size for the icon
-        int iconWidth = 20;
-        int iconHeight = 20;
-        // Create a new ImageIcon with the desired size
-        ImageIcon sizedIcon = new ImageIcon(Utility.getScaledImage(icon.getImage(), iconWidth, iconHeight));
-
-        System.out.println(icon);
-        registerButton = new JButton("Update Profile",sizedIcon);
-        registerButton.setBackground(new Color(0, 158, 15));
-        registerButton.setOpaque(true);
-        registerButton.setBorderPainted(false);
-        registerButton.setBounds(120, 400, 150, 40);
-
-
+        roles.setSelectedItem(sessionData.getRole());
+        roles.setEditable(false);
+        if (roles.getSelectedItem() == "Driver") {
+            truckNumberLabel.setVisible(true);
+            truckCapacityLabel.setVisible(true);
+            truckCapacity.setVisible(true);
+            truckNumber.setVisible(true);
+            truckNumber.setText(sessionData.getTruckNumber());
+            truckCapacity.setText(sessionData.getTruckCapacity());
+        }
 
         contentPane.add(fullName);
         contentPane.add(email);
@@ -137,7 +121,6 @@ public class ProfileGui extends JFrame  implements ActionListener {
         contentPane.add(roles);
         contentPane.add(truckNumber);
         contentPane.add(truckCapacity);
-        contentPane.add(registerButton);
 
 
 //        contentPane.set(menu)
