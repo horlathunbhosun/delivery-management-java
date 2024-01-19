@@ -204,7 +204,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
 
             // Check the result and show appropriate message
             if (response.equals("Registration Successful")) {
-                JOptionPane.showMessageDialog(null, "Data inserted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Registration Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
                 new LoginScreenGui();
                 dispose();
             } else {

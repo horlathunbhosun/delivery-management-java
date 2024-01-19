@@ -19,8 +19,8 @@ public class Main {
 //        MenuClass  swingMenuDemo = new MenuClass();
 //        swingMenuDemo.showMenuDemo();
 //        new RegistrationGui();
-        new WelcomeScreenGui();
-
+//        new WelcomeScreenGui();
+        new ListProductsGui();
 //        new CreateOrderGui();
 //       new ListDriversInfo();
 //       new AiGui();

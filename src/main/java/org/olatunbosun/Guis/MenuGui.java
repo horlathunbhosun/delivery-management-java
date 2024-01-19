@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 
 public class MenuGui extends JMenuBar implements ActionListener {
 
-    JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu;
-    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport;
+    JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
+    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, addProduct, viewProducts;
     Box horizontalBox;
 
     public MenuGui(){
@@ -21,11 +21,16 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
 
         ordersMenu = new JMenu("Orders");
+        productsMenu = new JMenu("Products");
+
         missionOverviewMenu = new JMenu("Mission Overview");
         driversMenu = new JMenu("Drivers");
 
         createOrders = new JMenuItem("Create Orders");
         viewOrders = new JMenuItem("View Orders");
+
+        addProduct = new JMenuItem("Add Product");
+        viewProducts = new JMenuItem("View Products");
 
         viewDeliverables = new JMenuItem("View Deliverables");
 
@@ -39,6 +44,12 @@ public class MenuGui extends JMenuBar implements ActionListener {
         editProfile.addActionListener(this);
         profileMenu.add(viewProfile);
         profileMenu.add(editProfile);
+
+        productsMenu.add(addProduct);
+        productsMenu.add(viewProducts);
+        addProduct.addActionListener(this);
+        viewProducts.addActionListener(this);
+
 
         ordersMenu.add(createOrders);
         ordersMenu.add(viewOrders);
@@ -60,6 +71,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
             ordersMenu.setVisible(true);
             missionOverviewMenu.setVisible(false);
             driversMenu.setVisible(false);
+            productsMenu.setVisible(false);
 
         }
         if (userRole.equals("scheduler")){
@@ -67,6 +79,8 @@ public class MenuGui extends JMenuBar implements ActionListener {
             ordersMenu.setVisible(false);
             missionOverviewMenu.setVisible(true);
             driversMenu.setVisible(false);
+            productsMenu.setVisible(true);
+
         }
 
         if (userRole.equals("driver")){
@@ -74,10 +88,13 @@ public class MenuGui extends JMenuBar implements ActionListener {
             ordersMenu.setVisible(false);
             missionOverviewMenu.setVisible(false);
             driversMenu.setVisible(true);
+            productsMenu.setVisible(false);
+
         }
         add(homeMenu);
         add(profileMenu);
         add(ordersMenu);
+        add(productsMenu);
         add(missionOverviewMenu);
         add(driversMenu);
 
@@ -112,6 +129,18 @@ public class MenuGui extends JMenuBar implements ActionListener {
             System.out.println("createOrders");
             disposeCurrentFrame();
             new CreateOrderGui();
+        }
+
+        if (e.getSource() == addProduct) {
+            System.out.println("addProduct");
+            disposeCurrentFrame();
+            new AddProductGui();
+        }
+
+        if (e.getSource() == viewProducts) {
+            System.out.println("viewProducts");
+            disposeCurrentFrame();
+            new ListProductsGui();
         }
 
 //        if (e.getSource() == viewOrders) {
