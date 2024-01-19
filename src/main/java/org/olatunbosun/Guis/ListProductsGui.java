@@ -79,6 +79,7 @@ public class ListProductsGui extends JFrame  {
         Vector<Vector<Object>> data = ProductController.getProducts();
         for (Vector<Object> row : data) {
             tableModel.addRow(row);
+            System.out.println(row);
         }
 
     }

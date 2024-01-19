@@ -147,11 +147,15 @@ public class MenuGui extends JMenuBar implements ActionListener {
             new ListProductsGui();
         }
 
-//        if (e.getSource() == viewOrders) {
-//            System.out.println("viewOrders");
-//            disposeCurrentFrame();
-//            new ViewOrderGui();
-//        }
+        if (e.getSource() == viewOrders) {
+            System.out.println("viewOrders");
+            disposeCurrentFrame();
+            if (SessionManager.getSession("userInfo").getRole().equals("customer")) {
+                new ListOrderGui();
+            }else{
+                new ListOrderSchedulerGui();
+            }
+        }
 
 //        if (e.getSource() == viewDeliverables) {
 //            System.out.println("viewDeliverables");

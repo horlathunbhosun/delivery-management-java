@@ -2,11 +2,11 @@ package org.olatunbosun.controllers;
 
 import org.olatunbosun.database.MysqlConnection;
 import org.olatunbosun.models.CreateOrder;
-import org.olatunbosun.models.Products;
 
 import java.sql.*;
+import java.util.Vector;
 
-public class CreateOrderController {
+public class OrderController {
 
 
     public static String insertCreateOrder(CreateOrder createOrder) {
@@ -98,6 +98,59 @@ public class CreateOrderController {
 
 
 
+    public static Vector<Vector<Object>> getUserOrders(int userId) {
+        Vector<Vector<Object>> orderData = new Vector<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+
+            String selectOrdersSql =  "SELECT o.*, oi.product_id, oi.quantity, oi.date_created, p.product_name " +
+                    "FROM orders o " +
+                    "INNER JOIN order_items oi ON o.id = oi.order_id " +
+                    "INNER JOIN products p ON oi.product_id = p.id " +
+                    "WHERE o.user_id = ?";
+
+            PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
+            try (selectStatement) {
+                // Set values for the placeholders
+                selectStatement.setInt(1, userId);
+                ResultSet resultSetUserOrders = selectStatement.executeQuery();
+                try (resultSetUserOrders) {
+                    while (resultSetUserOrders.next()) {
+                        // Extract data from the result set
+                        int orderId = resultSetUserOrders.getInt("id");
+                        String orderNumber = resultSetUserOrders.getString("order_number");
+                        String deliveryAddress = resultSetUserOrders.getString("delivery_address");
+                        String deliveryDate = resultSetUserOrders.getString("delivery_date");
+                        String orderStatus = resultSetUserOrders.getString("order_status");
+                        String productName = resultSetUserOrders.getString("product_name");
+                        int quantity = resultSetUserOrders.getInt("quantity");
+                        Timestamp dateCreated = resultSetUserOrders.getTimestamp("date_created");
+
+                        // Add the data to the collection
+                        Vector<Object> row = new Vector<>();
+                        row.add(orderId);
+                        row.add(orderNumber);
+                        row.add(productName);
+                        row.add(quantity);
+                        row.add(deliveryAddress);
+                        row.add(deliveryDate);
+                        row.add(orderStatus);
+                        row.add(dateCreated);
+                        orderData.add(row);
+                    }
+
+                    if (orderData.isEmpty()) {
+                        System.out.println("No Order found");
+                    }
+                    return orderData;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
 
 
 

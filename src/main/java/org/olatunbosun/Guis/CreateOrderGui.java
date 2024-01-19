@@ -2,7 +2,7 @@ package org.olatunbosun.Guis;
 
 import com.toedter.calendar.JDateChooser;
 import org.olatunbosun.Utility;
-import org.olatunbosun.controllers.CreateOrderController;
+import org.olatunbosun.controllers.OrderController;
 import org.olatunbosun.controllers.ProductController;
 import org.olatunbosun.models.CreateOrder;
 import org.olatunbosun.models.CreateOrderItem;
@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class CreateOrderGui extends JFrame implements ActionListener {
@@ -170,11 +169,11 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
             System.out.println(createOrder);
 
-            String responseMessage = CreateOrderController.insertCreateOrder(createOrder);
+            String responseMessage = OrderController.insertCreateOrder(createOrder);
            // Check the result and show appropriate message
             if (responseMessage.equals("Order created successfully")) {
                 JOptionPane.showMessageDialog(null, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
-                new HomeGui();
+                new ListOrderGui();
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Error: " + responseMessage, "Error", JOptionPane.ERROR_MESSAGE);

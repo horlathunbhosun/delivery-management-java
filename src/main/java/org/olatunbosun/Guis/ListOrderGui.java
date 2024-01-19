@@ -1,6 +1,9 @@
 package org.olatunbosun.Guis;
 
 import org.olatunbosun.Utility;
+import org.olatunbosun.controllers.OrderController;
+import org.olatunbosun.controllers.ProductController;
+import org.olatunbosun.session.SessionManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Vector;
 
 public class ListOrderGui extends JFrame {
 
@@ -22,7 +26,8 @@ public class ListOrderGui extends JFrame {
         super("List Orders Page");
 
 
-        setLayout(null);
+        JPanel contentPanel = new JPanel(new BorderLayout());
+
 
 //        setLayout(new FlowLayout());
 
@@ -34,7 +39,7 @@ public class ListOrderGui extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Create a label for the title
-        JLabel titleLabel = new JLabel("Drivers Information");
+        JLabel titleLabel = new JLabel("Customer Order Information");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -42,14 +47,17 @@ public class ListOrderGui extends JFrame {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Create columns for the table
-        String[] columns = {"ID", "Customer Information", "Address of Delivery", "Product Name", "Quanity"};
+        String[] columns = {"ID", "Order Number",  "Product Name", "Quantity", "Address of Delivery", "Delivery Date", "Order Status"};
         tableModel = new DefaultTableModel(null, columns);
         userTable = new JTable(tableModel);
 
         // Set the custom renderer and editor for the button column
 //        userTable.getColumnModel().getColumn(5).setCellRenderer(new ListDriversInfo.ButtonRenderer());
 //        userTable.getColumnModel().getColumn(5).setCellEditor(new ListDriversInfo.ButtonColumn());
-
+        userTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        userTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        userTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+        userTable.getColumnModel().getColumn(5).setPreferredWidth(150);
         // Set the table header
         JTableHeader tableHeader = userTable.getTableHeader();
         tableHeader.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font for header
@@ -57,29 +65,44 @@ public class ListOrderGui extends JFrame {
 
         userTable.setGridColor(Color.BLACK);
         userTable.setShowGrid(true);
-        userTable.setIntercellSpacing(new Dimension(1, 1)); // Adjust spacing between cells
+//        userTable.setIntercellSpacing(new Dimension(10, 1)); // Adjust spacing between cells
 
         JScrollPane scrollPane = new JScrollPane(userTable);
 
         // Add the table to the panel
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
 
 
         // Add the panel to the frame
-        add(mainPanel);
+//        add(mainPanel);
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
+        setContentPane(contentPanel);
+
+
+        getContentPane().setLayout(new BorderLayout());
 
         //set menu bar
         setJMenuBar(menu);
 
         // Add static data to the table
-//        addStaticUserData();
+        userOrderData();
 
         // Set frame properties
-        setSize(700, 500);
+        setSize(800, 500);
         setVisible(true);
     }
 
+
+
+    private void userOrderData() {
+        // Add data to the table from controller
+        Vector<Vector<Object>> data = OrderController.getUserOrders(SessionManager.getSession("userInfo").getUserId());
+        for (Vector<Object> row : data) {
+            tableModel.addRow(row);
+        }
+
+    }
 
 
 
