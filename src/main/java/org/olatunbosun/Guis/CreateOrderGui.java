@@ -2,12 +2,17 @@ package org.olatunbosun.Guis;
 
 import com.toedter.calendar.JDateChooser;
 import org.olatunbosun.Utility;
+import org.olatunbosun.controllers.CreateOrderController;
 import org.olatunbosun.controllers.ProductController;
+import org.olatunbosun.models.CreateOrder;
+import org.olatunbosun.models.CreateOrderItem;
+import org.olatunbosun.session.SessionManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class CreateOrderGui extends JFrame implements ActionListener {
@@ -149,9 +154,31 @@ public class CreateOrderGui extends JFrame implements ActionListener {
             if (!isValid) {
                 return;
             }
+            int productId = ProductController.getProductByProductName(String.valueOf(products.getSelectedItem()));
+            if (productId == 0) {
+                JOptionPane.showMessageDialog(this, "Product not found", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-            System.out.println(products.getSelectedItem());
+            CreateOrderItem createOrderItem = new CreateOrderItem(productId, Integer.parseInt(quantity.getText()));
+            // generate order id randomly
+            String orderNumber = Utility.generateOrderNumber();
 
+            String date = Utility.getDateFormatted(dateChooser.getDate());
+
+            CreateOrder createOrder = new CreateOrder(orderNumber,address.getText(),  date,"order_placed", SessionManager.getSession("userInfo").getUserId(), createOrderItem);
+
+            System.out.println(createOrder);
+
+            String responseMessage = CreateOrderController.insertCreateOrder(createOrder);
+           // Check the result and show appropriate message
+            if (responseMessage.equals("Order created successfully")) {
+                JOptionPane.showMessageDialog(null, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
+                new HomeGui();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: " + responseMessage, "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
         }
     }

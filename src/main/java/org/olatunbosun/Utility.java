@@ -3,6 +3,8 @@ package org.olatunbosun;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,6 +81,23 @@ public class Utility {
             return false;
         }
         return true;
+    }
+
+    //helper method to generate orderNumber randomly with UUid
+    public static String generateOrderNumber() {
+    	return java.util.UUID.randomUUID().toString();
+    }
+
+
+    public static String  getDateFormatted(Date $date) {
+        // Define the desired date format pattern
+        String pattern = "yyyy-MM-dd HH:mm:ss"; // Example pattern, adjust as needed
+        // Create a SimpleDateFormat object with the specified pattern
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+
+        // Format the date using the SimpleDateFormat object
+
+        return dateFormat.format($date);
     }
 
 }

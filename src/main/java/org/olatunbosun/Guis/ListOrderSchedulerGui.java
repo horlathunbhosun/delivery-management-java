@@ -1,24 +1,20 @@
 package org.olatunbosun.Guis;
 
-import org.olatunbosun.Utility;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-public class ListOrderGui extends JFrame {
+public class ListOrderSchedulerGui extends JFrame {
 
 
     private JTable userTable;
     private DefaultTableModel tableModel;
 
 
-    public ListOrderGui(){
+    public ListOrderSchedulerGui(){
         super("List Orders Page");
 
 
@@ -42,8 +38,14 @@ public class ListOrderGui extends JFrame {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Create columns for the table
-        String[] columns = {"ID", "Customer Information", "Address of Delivery", "Product Name", "Quanity"};
-        tableModel = new DefaultTableModel(null, columns);
+        String[] columns = { "Select","ID", "Customer Information", "Address of Delivery", "Product", "Delivery Sequence"};
+        tableModel = new DefaultTableModel(null, columns){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? Boolean.class : super.getColumnClass(columnIndex);
+            }
+
+        };
         userTable = new JTable(tableModel);
 
         // Set the custom renderer and editor for the button column
@@ -65,7 +67,14 @@ public class ListOrderGui extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-
+        // Create a button to retrieve selected IDs
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                submitSelectedRows();
+            }
+        });
         // Add the panel to the frame
         add(mainPanel);
 
@@ -80,10 +89,23 @@ public class ListOrderGui extends JFrame {
         setVisible(true);
     }
 
+    private void submitSelectedRows() {
+        for (int i = 0; i < userTable.getRowCount(); i++) {
+            boolean isSelected = (boolean) userTable.getValueAt(i, 0);
+            if (isSelected) {
+                // Get the ID from the second column (index 1)
+                int id = (int) userTable.getValueAt(i, 1);
+                System.out.println("Selected ID: " + id);
+                // Get the Delivery Sequence from the fourth column (index 3)
+                String deliverySequence = (String) userTable.getValueAt(i, 3);
+                System.out.println("Delivery Sequence: " + deliverySequence);
+                // Add your logic here to process the selected ID and Delivery Sequence
+            }
+        }
+    }
 
 
-
-
+    
 
 
 

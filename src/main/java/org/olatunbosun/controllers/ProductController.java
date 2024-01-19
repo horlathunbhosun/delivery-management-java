@@ -106,4 +106,39 @@ public class ProductController {
             return null; // or return an empty Vector if you prefer
         }
     }
+
+
+//create get product by id
+
+    public static Integer getProductByProductName(String productName) {
+        int productId = 0;
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+            String sql = "SELECT * FROM products WHERE product_name = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                // Set values for the placeholders
+                preparedStatement.setString(1, productName);
+
+                try (ResultSet resultSetProducts = preparedStatement.executeQuery()) {
+                    if (resultSetProducts.next()) {
+                        // Extract data from the result set
+                        productId = resultSetProducts.getInt("id");
+
+                        // Add the data to the collection
+                    }
+
+                    return productId;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
 }
+
+
+
+
