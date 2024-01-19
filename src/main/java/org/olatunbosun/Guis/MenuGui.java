@@ -42,6 +42,10 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         viewProfile.addActionListener(this);
         editProfile.addActionListener(this);
+
+        createOrders.addActionListener(this);
+        viewOrders.addActionListener(this);
+
         profileMenu.add(viewProfile);
         profileMenu.add(editProfile);
 

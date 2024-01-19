@@ -1,11 +1,14 @@
 package org.olatunbosun.Guis;
 
 import com.toedter.calendar.JDateChooser;
+import org.olatunbosun.Utility;
+import org.olatunbosun.controllers.ProductController;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Map;
 
 public class CreateOrderGui extends JFrame implements ActionListener {
 
@@ -19,6 +22,8 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
 
     JComboBox<String> products;
+
+    JDateChooser dateChooser;
 
     JButton addMore, orderButton;
 
@@ -68,11 +73,25 @@ public class CreateOrderGui extends JFrame implements ActionListener {
         // Add form components to the panel
         productsLabel = new JLabel("Products:");
 
-        String[] productList = { "Rice", "Beans", "Garri" };
+//        String[] productList = { "Rice", "Beans", "Garri" };
 
-        products = new JComboBox<>(productList);
+        Map<Integer, String> productMap =  ProductController.fetchProductDataFromDatabase();
+
+        // Convert the map entries into arrays for JComboBox
+//        Integer[] productIds = productMap.keySet().toArray(new Integer[0]);
+        String[] productNames = productMap.values().toArray(new String[0]);
+
+
+        products = new JComboBox<>(productNames);
+
+        // Set a custom renderer for the JComboBox
+
+
+        System.out.println(products.getSelectedItem());
         quantityLabel = new JLabel("Quanity:");
         quantity = new JTextField();
+
+
 
         panel.add(productsLabel);
         panel.add(products);
@@ -88,44 +107,6 @@ public class CreateOrderGui extends JFrame implements ActionListener {
     }
 
 
-//    private JPanel createFormSecondSectionPanel() {
-//        JPanel panel = new JPanel(new GridBagLayout());
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.insets = new Insets(5, 5, 5, 5); // Adjust these insets to control the spacing
-//
-//        // Add form components to the panel
-//        addressLabel = new JLabel("Address: ");
-//        address = new JTextArea();
-//        address.setPreferredSize(new Dimension(200, 100)); // Set a preferred size for JTextArea
-//
-//        deliveryDateLabel = new JLabel("Delivery Date: ");
-//        JDateChooser dateChooser = new JDateChooser();
-//        dateChooser.setDateFormatString("yyyy-MM-dd");
-//
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        panel.add(addressLabel, gbc);
-//
-//        gbc.gridx = 1;
-//        gbc.gridy = 0;
-//        panel.add(address, gbc);
-//
-//        gbc.gridx = 0;
-//        gbc.gridy = 1;
-//        panel.add(deliveryDateLabel, gbc);
-//
-//        gbc.gridx = 1;
-//        gbc.gridy = 1;
-//        panel.add(dateChooser, gbc);
-//
-//        // Add an empty border to the panel to create spacing around the components
-//        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//
-//        return panel;
-//    }
-
-
-
     private JPanel createFormSecondSectionPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 2));
@@ -136,7 +117,7 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
         deliveryDateLabel = new JLabel("Delivery Date: ");
 
-        JDateChooser dateChooser = new JDateChooser();
+         dateChooser = new JDateChooser();
 
         // Set date format (optional)
         dateChooser.setDateFormatString("yyyy-MM-dd");
@@ -163,6 +144,66 @@ public class CreateOrderGui extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == orderButton) {
+            boolean isValid  =  validation();
+            if (!isValid) {
+                return;
+            }
+
+            System.out.println(products.getSelectedItem());
+
+
+        }
+    }
+
+
+    public boolean validation() {
+        boolean isValid = true;
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (quantity.getText().isEmpty() || address.getText().isEmpty() || dateChooser.getDate() == null || products.getSelectedItem() == null) {
+            errorMessage.append("All Fields Are Required\n");
+            isValid = false;
+        }
+
+        if (products.getSelectedItem() == null) {
+            errorMessage.append("You need to select a product\n");
+            isValid = false;
+        }
+
+        if (address.getText().isEmpty()) {
+            errorMessage.append("Address is required\n");
+            isValid = false;
+        }
+
+        if (quantity.getText().isEmpty()) {
+            errorMessage.append("Quantity is required\n");
+            isValid = false;
+        }
+
+        if (dateChooser.getDate() == null) {
+            errorMessage.append("Date is required\n");
+            isValid = false;
+        }
+
+        if (!Utility.isNumeric(quantity.getText())) {
+            errorMessage.append("Quantity must be a number\n");
+            isValid = false;
+        }
+
+
+        if (dateChooser.getDate().before(Utility.getTodayDate())) {
+            errorMessage.append("You need to choose a date after today\n");
+            isValid = false;
+        }
+
+        // Display the first error encountered, if any
+        if (!isValid) {
+            JOptionPane.showMessageDialog(this, errorMessage.toString().trim(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return isValid;
 
     }
+
 }

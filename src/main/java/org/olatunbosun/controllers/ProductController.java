@@ -6,6 +6,8 @@ import org.olatunbosun.models.Products;
 import org.olatunbosun.models.Registration;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class ProductController {
@@ -66,6 +68,37 @@ public class ProductController {
                         System.out.println("No Products found");
                     }
                     return productDate;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
+
+
+
+    public static Map<Integer, String> fetchProductDataFromDatabase() {
+        Map<Integer, String> productMap = new HashMap<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+            String sql = "SELECT * FROM products";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                // Set values for the placeholders
+
+                try (ResultSet resultSetProducts = preparedStatement.executeQuery()) {
+                    while (resultSetProducts.next()) {
+                        // Extract data from the result set
+                        int id = resultSetProducts.getInt("id");
+                        String productName = resultSetProducts.getString("product_name");
+
+                        // Add the data to the collection
+                        productMap.put(id, productName);
+                    }
+
+                    return productMap;
                 }
             }
         } catch (SQLException e) {
