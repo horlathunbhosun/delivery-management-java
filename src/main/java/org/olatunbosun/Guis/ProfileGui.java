@@ -21,19 +21,12 @@ public class ProfileGui extends JFrame  implements ActionListener {
     public ProfileGui(){
         super("Profile Page");
 
-
-
-
         // Create an instance of the Menu class
         MenuGui menu = new MenuGui();
-
-
         // Add the components to the frame
         JPanel contentPane = new JPanel();
         //add session manager to the frame
         SessionData sessionData = SessionManager.getSession("userInfo");
-
-
 
         // Create the text fields
          fullNameLabel = new JLabel("FullName:");
