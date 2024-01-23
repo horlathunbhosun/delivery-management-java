@@ -23,9 +23,7 @@ public class WelcomeScreenGui extends JFrame {
 //        JLabel label = new JLabel("");
         String text = "Welcome to the Delivery Management System";
         JLabel label = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
-
         panel.add(label);
-
         // Add two buttons to the JPanel
         JButton registrationButton = new JButton("Registration");
         registrationButton.addActionListener(new ActionListener() {
@@ -42,7 +40,6 @@ public class WelcomeScreenGui extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
 
-
             public void actionPerformed(ActionEvent e) {
                 // Open the login page
                 frame.dispose();
@@ -54,11 +51,9 @@ public class WelcomeScreenGui extends JFrame {
 
         // Add the JPanel to the JFrame
         frame.add(panel);
-
         // Set the size and location of the JFrame
         frame.setSize(400, 300);
         frame.setLocationRelativeTo(null);
-
         // Make the JFrame visible
         frame.setVisible(true);
     }
