@@ -23,28 +23,7 @@ public class Main {
         }else{
              new HomeGui();
         }
-//        new CreateOrder();
-//        MenuClass  swingMenuDemo = new MenuClass();
-//        swingMenuDemo.showMenuDemo();
-//        new RegistrationGui();
-//        new WelcomeScreenGui();
-//        new ListProductsGui();
-//        new CreateOrderGui();
-//       new ListDriversInfo();
-//       new AiGui();
-//       new DeliverablesOrdersGui();
-//        Connection connection = getConnection();
-//        // Close the connection when done
-//        try {
-//            if (connection != null && !connection.isClosed()) {
-//                connection.close();
-//                System.out.println("Connection closed.");
-//            }
-//
-//            System.out.println(connection);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
 
 
 //           new ProfileGui();
