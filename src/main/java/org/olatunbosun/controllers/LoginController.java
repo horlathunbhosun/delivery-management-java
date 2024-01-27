@@ -5,6 +5,7 @@ import org.olatunbosun.database.MysqlConnection;
 import org.olatunbosun.models.LoginModel;
 import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import java.sql.*;
 
@@ -39,6 +40,7 @@ public class LoginController {
                             sessionData.setTruckNumber(resultSet.getString("truck_number"));
                             sessionData.setTruckCapacity(resultSet.getString("truck_capacity"));
                             SessionManager.createSession("userInfo", sessionData);
+                            SessionManagerMain.saveUserToFile(sessionData);
                             return "Login Successful";
                         } else {
                             System.out.println("Authentication failed");

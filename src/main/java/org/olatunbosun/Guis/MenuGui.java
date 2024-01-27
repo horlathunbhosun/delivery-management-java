@@ -2,6 +2,7 @@ package org.olatunbosun.Guis;
 
 import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -68,7 +69,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
 //         horizontalBox = Box.createHorizontalBox();
 
         //add session manager to the frame
-        SessionData sessionData = SessionManager.getSession("userInfo");
+        SessionData sessionData = SessionManagerMain.loadUserFromFile();
         String userRole = sessionData.getRole();
         if (userRole.equals("customer")){
             profileMenu.setVisible(true);

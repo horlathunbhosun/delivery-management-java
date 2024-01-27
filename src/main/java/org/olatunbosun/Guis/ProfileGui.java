@@ -3,6 +3,7 @@ package org.olatunbosun.Guis;
 import org.olatunbosun.Utility;
 import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,8 @@ public class ProfileGui extends JFrame  implements ActionListener {
         // Add the components to the frame
         JPanel contentPane = new JPanel();
         //add session manager to the frame
-        SessionData sessionData = SessionManager.getSession("userInfo");
+//        SessionData sessionData = SessionManager.getSession("userInfo");
+        SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
         // Create the text fields
          fullNameLabel = new JLabel("FullName:");

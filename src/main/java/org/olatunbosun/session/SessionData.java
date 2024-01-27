@@ -1,6 +1,8 @@
 package org.olatunbosun.session;
 
-public class SessionData {
+import java.io.Serializable;
+
+public class SessionData implements Serializable {
     // Add fields to store user-specific session data
 //    private final String someData;
 
@@ -20,6 +22,19 @@ public class SessionData {
 
 
     // Add constructor to set the user-specific session data
+    public SessionData(String fullName, String email, int userId, String role, String phoneNumber, String truckNumber, String truckCapacity) {
+        this.fullName = fullName;
+        this.email = email;
+        this.userId = userId;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.truckNumber = truckNumber;
+        this.truckCapacity = truckCapacity;
+    }
+
+    public SessionData(){
+
+    }
 
 
     public String getEmail(){
