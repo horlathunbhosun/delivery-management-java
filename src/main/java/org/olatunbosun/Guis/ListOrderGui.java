@@ -3,7 +3,9 @@ package org.olatunbosun.Guis;
 import org.olatunbosun.Utility;
 import org.olatunbosun.controllers.OrderController;
 import org.olatunbosun.controllers.ProductController;
+import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +22,7 @@ public class ListOrderGui extends JFrame {
 
     private JTable userTable;
     private DefaultTableModel tableModel;
-
+    SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
     public ListOrderGui(){
         super("List Orders Page");
@@ -97,7 +99,7 @@ public class ListOrderGui extends JFrame {
 
     private void userOrderData() {
         // Add data to the table from controller
-        Vector<Vector<Object>> data = OrderController.getUserOrders(SessionManager.getSession("userInfo").getUserId());
+        Vector<Vector<Object>> data = OrderController.getUserOrders(sessionData.getUserId());
         for (Vector<Object> row : data) {
             tableModel.addRow(row);
         }

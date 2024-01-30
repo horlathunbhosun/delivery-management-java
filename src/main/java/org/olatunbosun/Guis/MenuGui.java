@@ -13,6 +13,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
     JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
     JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, addProduct, viewProducts;
     Box horizontalBox;
+    SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
     public MenuGui(){
 
@@ -69,7 +70,6 @@ public class MenuGui extends JMenuBar implements ActionListener {
 //         horizontalBox = Box.createHorizontalBox();
 
         //add session manager to the frame
-        SessionData sessionData = SessionManagerMain.loadUserFromFile();
         String userRole = sessionData.getRole();
         if (userRole.equals("customer")){
             profileMenu.setVisible(true);
@@ -90,7 +90,8 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         if (userRole.equals("driver")){
             profileMenu.setVisible(false);
-            ordersMenu.setVisible(false);
+            createOrders.setVisible(false);
+            ordersMenu.setVisible(true);
             missionOverviewMenu.setVisible(false);
             driversMenu.setVisible(true);
             productsMenu.setVisible(false);
@@ -151,8 +152,8 @@ public class MenuGui extends JMenuBar implements ActionListener {
         if (e.getSource() == viewOrders) {
             System.out.println("viewOrders");
             disposeCurrentFrame();
-            if (SessionManager.getSession("userInfo").getRole().equals("customer")) {
-                new ListOrderGui();
+            if (sessionData.getRole().equals("customer")) {
+                new ListOrderGuiCustomer();
             }else{
                 new ListOrderSchedulerGui();
             }
