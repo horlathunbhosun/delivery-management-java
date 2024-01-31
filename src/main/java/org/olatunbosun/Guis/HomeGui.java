@@ -22,7 +22,6 @@ public class HomeGui extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-        setLocationRelativeTo(null);
         welcomelabel = new JLabel("Welcome to Goods Delivery Application");
         welcomelabel.setFont(new Font("Serif", Font.PLAIN, 24));
         welcomelabel.setBorder(new EmptyBorder(16, 0, 37, 0));// top,left,bottom,right
@@ -39,6 +38,8 @@ public class HomeGui extends JFrame implements ActionListener {
         panel.add(emptyLabel);
         //set menu bar
         setJMenuBar(menu);
+        setLocationRelativeTo(null);
+
         this.setTitle("Delivery Application");
         this.setSize(800, 500);
         this.setVisible(true);
