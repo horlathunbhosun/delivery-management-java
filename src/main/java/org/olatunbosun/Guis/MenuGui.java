@@ -58,8 +58,10 @@ public class MenuGui extends JMenuBar implements ActionListener {
         productsMenu.add(viewProducts);
         addProduct.addActionListener(this);
         viewProducts.addActionListener(this);
+
         assignOrdersToDrivers.addActionListener(this);
         viewAssignedOrders.addActionListener(this);
+        generateReport.addActionListener(this);
 
         ordersMenu.add(createOrders);
         ordersMenu.add(viewOrders);
@@ -175,6 +177,12 @@ public class MenuGui extends JMenuBar implements ActionListener {
             System.out.println("viewAssignedOrders");
             disposeCurrentFrame();
             new ListAssignedOrders();
+        }
+
+        if (e.getSource() == generateReport) {
+            System.out.println("viewDeliverables");
+            disposeCurrentFrame();
+            new GenerateReportGui();
         }
 
 //        if (e.getSource() == viewDeliverables) {

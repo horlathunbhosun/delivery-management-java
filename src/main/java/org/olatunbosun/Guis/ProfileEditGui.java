@@ -29,8 +29,9 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
         MenuGui menu = new MenuGui();
 
         //add session manager to the frame
-      // SessionData sessionData = SessionManager.getSession("userInfo");
         SessionData sessionData = SessionManagerMain.loadUserFromFile();
+
+        Utility.checkSessionAndHandleExpiration(this, sessionData);
 
         // Add the components to the frame
         JPanel contentPane = new JPanel();

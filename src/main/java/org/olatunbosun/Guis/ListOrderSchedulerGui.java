@@ -127,10 +127,10 @@ public class ListOrderSchedulerGui extends JFrame implements ActionListener{
             AssignOrderDelivery assignOrderDelivery = new AssignOrderDelivery(order.getOrderId(),driverId, order.getCustomerId(),deliverySequence, order.getDeliveryAddress() ,"assigned_to_driver" );
                 assignOrderDelivery.getOrderStatus();
             assignOrderDeliveries.add(assignOrderDelivery);
-            System.out.println("order delivery sequence: " + assignOrderDelivery);
-            System.out.println("Selected Order: " + order);
-            System.out.println("Selected ID: " + item.get("ID"));
-            System.out.println("Delivery Sequence: " + item.get("delivery_sequence"));
+//            System.out.println("order delivery sequence: " + assignOrderDelivery);
+//            System.out.println("Selected Order: " + order);
+//            System.out.println("Selected ID: " + item.get("ID"));
+//            System.out.println("Delivery Sequence: " + item.get("delivery_sequence"));
         }
 
 

@@ -1,15 +1,17 @@
 package org.olatunbosun.controllers;
 
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.olatunbosun.database.MysqlConnection;
 import org.olatunbosun.models.AssignOrderDelivery;
 import org.olatunbosun.models.CreateOrder;
 import org.olatunbosun.models.Order;
-import org.olatunbosun.models.Products;
 
+import java.io.FileOutputStream;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 public class OrderController {
@@ -353,7 +355,6 @@ public class OrderController {
     }
 
 
-
     public static String insertAssignDriverOrder(List<AssignOrderDelivery> assignOrderDelivery) {
         Connection connection = null;
         try {
@@ -424,6 +425,99 @@ public class OrderController {
             }
         }
     }
+
+
+
+    public static String GenerateReportDocument(String dateSelected) {
+
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+
+            // Prepare the SQL statement with placeholders
+            String selectOrdersSql =
+                    "SELECT od.*, ors.*,us.fullname, dr.fullname AS driverName, oi.product_id, oi.quantity, oi.date_created " +
+                            "FROM order_delivery od " +
+                            "INNER JOIN orders ors ON od.order_id = ors.id " +
+                            "INNER JOIN users us ON ors.user_id = us.id " +
+                            "INNER JOIN users dr ON od.driver_id = dr.id " +
+                            "INNER JOIN order_items oi ON od.order_id = oi.order_id " + "WHERE od.created_at = ? " +
+                            "ORDER BY od.created_at DESC";
+
+//            String sql = "SELECT * FROM order WHERE date_column = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersSql)) {
+                // Set the date parameter based on user input
+                preparedStatement.setDate(1, Date.valueOf(dateSelected));
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    // Check if there are any missions for the selected date
+                    if (!resultSet.next()) {
+                        return "No missions found for the selected date";
+                    }
+
+                    // Create Word document
+                    XWPFDocument document = new XWPFDocument();
+
+                    // Create title with the chosen day
+                    XWPFParagraph titleParagraph = document.createParagraph();
+                    titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+
+                    XWPFRun titleRun = titleParagraph.createRun();
+                    titleRun.setBold(true);
+                    titleRun.setFontSize(16);
+                    titleRun.setText(" THE DAY SELECTED ");
+
+                    // Add missions to the document
+                    do {
+                        String deliverAddress = resultSet.getString("delivery_address");
+                        String driverFullName = resultSet.getString("driverName");
+//                        String deliveryLocation = resultSet.getString("route");
+                        String deliveryDate = resultSet.getString("delivery_date");
+                        String customerFullName = resultSet.getString("fullname");
+
+                        // Create mission paragraph
+                        XWPFParagraph missionParagraph = document.createParagraph();
+                        missionParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+                        // Add mission details
+                        missionParagraph.createRun().setText("Driver: " + driverFullName);
+                        missionParagraph.createRun().addCarriageReturn();
+                        missionParagraph.createRun().setText("Route: " + "from warehouse to " + deliverAddress + " on " + deliveryDate);
+                        missionParagraph.createRun().addCarriageReturn();
+                        missionParagraph.createRun().setText("Warehouse Address: " + "Back to Warehouse" + " on " + deliveryDate);
+                        missionParagraph.createRun().setText("Customer: " + customerFullName + " on " + deliveryDate);
+
+                        // Add delivery addresses
+                        // ...
+                        missionParagraph.createRun().addCarriageReturn();
+
+
+
+                        // Add warehouse again to end the mission
+                        missionParagraph.createRun().addCarriageReturn();
+                        missionParagraph.createRun().setText("Warehouse Address: " + "where the driver will return to after the last delivery" + " on " + deliveryDate);
+                    } while (resultSet.next());
+
+                    // Save Word document
+                    String outputPath = "src/main/resources/reports/"; // Change this to your desired directory
+                    String fileName =  dateSelected + "-GeneratedDocument.docx";
+
+                    try (FileOutputStream fileOut = new FileOutputStream(outputPath + fileName)) {
+                        document.write(fileOut);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            return "Error connecting to the database: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error during document generation: " + e.getMessage();
+        }
+        return "Document generated successfully";
+
+    }
+
+
+
+
 
 
 
