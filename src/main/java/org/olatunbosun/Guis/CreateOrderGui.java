@@ -6,7 +6,9 @@ import org.olatunbosun.controllers.OrderController;
 import org.olatunbosun.controllers.ProductController;
 import org.olatunbosun.models.CreateOrder;
 import org.olatunbosun.models.CreateOrderItem;
+import org.olatunbosun.session.SessionData;
 import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -165,18 +167,23 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
             String date = Utility.getDateFormatted(dateChooser.getDate());
 
-            CreateOrder createOrder = new CreateOrder(orderNumber,address.getText(),  date,"order_placed", SessionManager.getSession("userInfo").getUserId(), createOrderItem);
+            SessionData sessionData = SessionManagerMain.loadUserFromFile();
+
+            Utility.checkSessionAndHandleExpiration(this, sessionData);
+
+
+            CreateOrder createOrder = new CreateOrder(orderNumber,address.getText(),  date,"order_placed", sessionData.getUserId(), createOrderItem);
 
             System.out.println(createOrder);
 
             String responseMessage = OrderController.insertCreateOrder(createOrder);
            // Check the result and show appropriate message
             if (responseMessage.equals("Order created successfully")) {
-                JOptionPane.showMessageDialog(null, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
                 new ListOrderGui();
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Error: " + responseMessage, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + responseMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -186,6 +193,8 @@ public class CreateOrderGui extends JFrame implements ActionListener {
     public boolean validation() {
         boolean isValid = true;
         StringBuilder errorMessage = new StringBuilder();
+//        dateChooser.getDate();
+        System.out.println(dateChooser.getDate());
 
         if (quantity.getText().isEmpty() || address.getText().isEmpty() || dateChooser.getDate() == null || products.getSelectedItem() == null) {
             errorMessage.append("All Fields Are Required\n");
@@ -218,7 +227,7 @@ public class CreateOrderGui extends JFrame implements ActionListener {
         }
 
 
-        if (dateChooser.getDate().before(Utility.getTodayDate())) {
+        if (dateChooser.getDate() != null && dateChooser.getDate().before(Utility.getTodayDate())) {
             errorMessage.append("You need to choose a date after today\n");
             isValid = false;
         }

@@ -38,7 +38,7 @@ public class HomeGui extends JFrame implements ActionListener {
         panel.add(emptyLabel);
         //set menu bar
         setJMenuBar(menu);
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
 
         this.setTitle("Delivery Application");
         this.setSize(800, 500);

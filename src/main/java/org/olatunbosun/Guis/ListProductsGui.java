@@ -21,8 +21,6 @@ public class ListProductsGui extends JFrame  {
         super("List Products Page");
 
 
-//        setLayout(null);
-
         setLayout(new FlowLayout());
 
         // Create an instance of the Menu class

@@ -1,9 +1,15 @@
 package org.olatunbosun.controllers;
 
 import org.olatunbosun.database.MysqlConnection;
+import org.olatunbosun.models.AssignOrderDelivery;
 import org.olatunbosun.models.CreateOrder;
+import org.olatunbosun.models.Order;
+import org.olatunbosun.models.Products;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class OrderController {
@@ -16,15 +22,16 @@ public class OrderController {
             connection.setAutoCommit(false);
 
             // Insert into the 'orders' table
-            String insertOrderSql = "INSERT INTO orders (order_number,delivery_address,delivery_date,order_status,user_id, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+            String insertOrderSql = "INSERT INTO orders (order_number,delivery_address,delivery_date,order_status,order_assigned,user_id, created_at) VALUES (?, ?, ?, ?, ?, ?,?)";
             PreparedStatement orderStatement = connection.prepareStatement(insertOrderSql, Statement.RETURN_GENERATED_KEYS);
             try (orderStatement) {
                 orderStatement.setString(1, createOrder.getOrderNumber());
                 orderStatement.setString(2, createOrder.getDeliveryAddress());
                 orderStatement.setString(3, createOrder.getDeliveryDate());
                 orderStatement.setString(4, createOrder.getOrderStatus());
-                orderStatement.setInt(5, createOrder.getCustomerId());
-                orderStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+                orderStatement.setInt(5, 0);
+                orderStatement.setInt(6, createOrder.getCustomerId());
+                orderStatement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
 
                 int orderRowsAffected = orderStatement.executeUpdate();
 
@@ -108,7 +115,7 @@ public class OrderController {
                     "FROM orders o " +
                     "INNER JOIN order_items oi ON o.id = oi.order_id " +
                     "INNER JOIN products p ON oi.product_id = p.id " +
-                    "WHERE o.user_id = ?";
+                    "WHERE o.user_id = ? " + "ORDER BY o.created_at DESC";
 
             PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
             try (selectStatement) {
@@ -153,18 +160,62 @@ public class OrderController {
     }
 
 
+
+    public static Order getUserOrdersByOrderId(String orderId) {
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+
+            String selectOrdersSql =  "SELECT o.*, oi.product_id, oi.quantity, oi.date_created, p.product_name " +
+                    "FROM orders o " +
+                    "INNER JOIN order_items oi ON o.id = oi.order_id " +
+                    "INNER JOIN products p ON oi.product_id = p.id " +
+                    "WHERE o.order_number = ?";
+
+            PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
+            try (selectStatement) {
+                // Set values for the placeholders
+                selectStatement.setString(1, orderId);
+                ResultSet resultSetUserOrders = selectStatement.executeQuery();
+                try (resultSetUserOrders) {
+                    while (resultSetUserOrders.next()) {
+                        // Extract data from the result set
+                        int order_id = resultSetUserOrders.getInt("id");
+                        int userId = resultSetUserOrders.getInt("user_id");
+                        String orderNumber = resultSetUserOrders.getString("order_number");
+                        String deliveryAddress = resultSetUserOrders.getString("delivery_address");
+                        String deliveryDate = resultSetUserOrders.getString("delivery_date");
+                        String orderStatus = resultSetUserOrders.getString("order_status");
+                        String productName = resultSetUserOrders.getString("product_name");
+                        int quantity = resultSetUserOrders.getInt("quantity");
+                        Timestamp dateCreated = resultSetUserOrders.getTimestamp("date_created");
+
+                        // Add the data to the collection
+                        return new Order(order_id,userId, orderNumber, deliveryAddress, deliveryDate, orderStatus, productName, quantity, dateCreated.toString());
+                    }
+                    System.out.println("No Order found");
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
+
+
     public static Vector<Vector<Object>> getAllUserOrders() {
         Vector<Vector<Object>> orderData = new Vector<>();
 
         try (Connection connection = MysqlConnection.getConnection()) {
             // Prepare the SQL statement with placeholders
-
             String selectOrdersSql =  "SELECT o.*, us.fullname, oi.product_id, oi.quantity, oi.date_created, p.product_name " +
                     "FROM orders o " +
                     "INNER JOIN users us ON o.user_id = us.id " +
                     "INNER JOIN order_items oi ON o.id = oi.order_id " +
                     "INNER JOIN products p ON oi.product_id = p.id " +
-                    "ORDER BY o.id DESC";
+                    "WHERE o.order_assigned = false AND o.order_status = 'order_placed' "+
+                    "ORDER BY o.created_at DESC";
 
             PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
             try (selectStatement) {
@@ -201,6 +252,181 @@ public class OrderController {
             return null; // or return an empty Vector if you prefer
         }
     }
+
+
+
+//    public static String insertAssignDriverOrder(List<AssignOrderDelivery> assignOrderDelivery) {
+//        try {
+//            Connection connection = MysqlConnection.getConnection();
+//            // Prepare the SQL statement with placeholders
+//            String sql = "INSERT INTO order_delivery (order_id, driver_id, sequence, location, order_status, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+//            String updateSql = "UPDATE orders SET order_assigned = true, order_status = 'assigned_to_driver' WHERE id = ?";
+//
+//            for (AssignOrderDelivery orderDelivery : assignOrderDelivery) {
+//                try (PreparedStatement insertStatement = connection.prepareStatement(sql);
+//                     PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+//                    // Set values for the placeholders
+//                    insertStatement.setInt(1, orderDelivery.getOrderId());
+//                    insertStatement.setInt(2, orderDelivery.getDeliveryPersonId());
+//                    insertStatement.setInt(3, orderDelivery.getSequenceNumber());
+//                    insertStatement.setString(4, orderDelivery.getLocation());
+//                    insertStatement.setString(5, orderDelivery.getOrderStatus());
+//                    insertStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+//
+//                    // Execute the statement
+//                    int rowsAffected = insertStatement.executeUpdate();
+//                    System.out.println(rowsAffected + " row(s) affected.");
+//                    if (rowsAffected <= 0) {
+//                        return "Order Failed to assign \n Please Try Again";
+//                    }
+//
+//                    // Set values for the update statement placeholders
+//                    updateStatement.setInt(1, orderDelivery.getOrderId());
+//
+//                    // Execute the update statement
+//                    int updateRowsAffected = updateStatement.executeUpdate();
+//                    System.out.println(updateRowsAffected + " row(s) updated.");
+//                    if (updateRowsAffected <= 0) {
+//                        return "Failed to update order status \n Please Try Again";
+//                    }
+//
+//                }
+//            }
+//            return "Order Assigned to driver Successful";
+//
+//        } catch (SQLException e) {
+//            return e.getMessage();
+//        }
+//
+//    }
+
+
+    public static Vector<Vector<Object>> getAllUserOrdersAssignedToDriver() {
+        Vector<Vector<Object>> orderDataDelivery = new Vector<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+            String selectOrdersSql =  "SELECT od.*, ors.*, us.fullname,dr.fullname AS driverName, oi.product_id, oi.quantity, oi.date_created " +
+                    "FROM order_delivery od " +
+                    "INNER JOIN orders ors ON od.order_id = ors.id " +
+                    "INNER JOIN users us ON ors.user_id = us.id " +
+                    "INNER JOIN users dr ON od.driver_id = dr.id " +
+                    "INNER JOIN order_items oi ON od.order_id = oi.order_id " +
+                    "ORDER BY od.created_at DESC";
+
+            PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
+            try (selectStatement) {
+                // Set values for the placeholders
+                ResultSet resultSetUserOrders = selectStatement.executeQuery();
+                try (resultSetUserOrders) {
+                    while (resultSetUserOrders.next()) {
+
+                        // Extract data from the result set
+                        String customerfullName = resultSetUserOrders.getString("fullname");
+                        String driverfullName = resultSetUserOrders.getString("driverName");
+                        String orderNumber = resultSetUserOrders.getString("order_number");
+//                        String productName = resultSetUserOrders.getString("product_name");
+                        String deliveryDate = resultSetUserOrders.getString("delivery_date");
+                        String orderStatus = resultSetUserOrders.getString("order_status");
+
+                        // Add the data to the collection
+                        Vector<Object> row = new Vector<>();
+                        row.add(orderNumber);
+                        row.add(customerfullName);
+                        row.add(driverfullName);
+                        row.add(deliveryDate);
+                        row.add(orderStatus);
+                        orderDataDelivery.add(row);
+                    }
+
+                    if (orderDataDelivery.isEmpty()) {
+                        System.out.println("No Order found");
+                    }
+                    System.out.println("Order Data: " + orderDataDelivery);
+                    return orderDataDelivery;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
+
+
+
+    public static String insertAssignDriverOrder(List<AssignOrderDelivery> assignOrderDelivery) {
+        Connection connection = null;
+        try {
+            connection = MysqlConnection.getConnection();
+            // Set auto-commit to false to start a transaction
+            connection.setAutoCommit(false);
+
+            // Prepare the SQL statement with placeholders
+            String sql = "INSERT INTO order_delivery (order_id, driver_id, sequence, location, order_status, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+            String updateSql = "UPDATE orders SET order_assigned = true, order_status = 'assigned_to_driver' WHERE id = ?";
+
+            for (AssignOrderDelivery orderDelivery : assignOrderDelivery) {
+                try (PreparedStatement insertStatement = connection.prepareStatement(sql);
+                     PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+                    // Set values for the placeholders
+                    insertStatement.setInt(1, orderDelivery.getOrderId());
+                    insertStatement.setInt(2, orderDelivery.getDeliveryPersonId());
+                    insertStatement.setInt(3, orderDelivery.getSequenceNumber());
+                    insertStatement.setString(4, orderDelivery.getLocation());
+                    insertStatement.setString(5, orderDelivery.getOrderStatus());
+                    insertStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+
+                    // Execute the statement
+                    int rowsAffected = insertStatement.executeUpdate();
+                    System.out.println(rowsAffected + " row(s) affected.");
+                    if (rowsAffected <= 0) {
+                        // Rollback the transaction and return error message
+                        connection.rollback();
+                        return "Order Failed to assign \n Please Try Again";
+                    }
+
+                    // Set values for the update statement placeholders
+                    updateStatement.setInt(1, orderDelivery.getOrderId());
+
+                    // Execute the update statement
+                    int updateRowsAffected = updateStatement.executeUpdate();
+                    System.out.println(updateRowsAffected + " row(s) updated.");
+                    if (updateRowsAffected <= 0) {
+                        // Rollback the transaction and return error message
+                        connection.rollback();
+                        return "Failed to update order status \n Please Try Again";
+                    }
+                }
+            }
+
+            // If all operations are successful, commit the transaction
+            connection.commit();
+            return "Order Assigned to driver Successful";
+
+        } catch (SQLException e) {
+            // Rollback the transaction in case of any exception
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();  // Handle rollback exception
+            }
+            return e.getMessage();
+        } finally {
+            // Set auto-commit back to true
+            try {
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                }
+            } catch (SQLException setAutoCommitException) {
+                setAutoCommitException.printStackTrace();  // Handle setAutoCommit exception
+            }
+        }
+    }
+
+
+
 
 
 }

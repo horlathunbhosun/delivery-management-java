@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class MenuGui extends JMenuBar implements ActionListener {
 
     JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
-    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , addProduct, viewProducts;
+    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , viewAssignedOrders , addProduct, viewProducts;
     Box horizontalBox;
     SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
@@ -42,6 +42,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
         editProfile = new JMenuItem("Edit Profile");
         generateReport = new JMenuItem("Generate Report");
         assignOrdersToDrivers = new JMenuItem("Assign Orders to Drivers");
+        viewAssignedOrders = new JMenuItem("View Assigned Orders");
 
 
         viewProfile.addActionListener(this);
@@ -58,11 +59,13 @@ public class MenuGui extends JMenuBar implements ActionListener {
         addProduct.addActionListener(this);
         viewProducts.addActionListener(this);
         assignOrdersToDrivers.addActionListener(this);
+        viewAssignedOrders.addActionListener(this);
 
         ordersMenu.add(createOrders);
         ordersMenu.add(viewOrders);
         missionOverviewMenu.add(generateReport);
         missionOverviewMenu.add(assignOrdersToDrivers);
+        missionOverviewMenu.add(viewAssignedOrders);
         driversMenu.add(viewDeliverables);
         driversMenu.add(completeDeliverable);
 
@@ -167,6 +170,11 @@ public class MenuGui extends JMenuBar implements ActionListener {
             System.out.println("assignOrdersToDrivers");
             disposeCurrentFrame();
             new ListDriversInfo();
+        }
+        if (e.getSource() == viewAssignedOrders) {
+            System.out.println("viewAssignedOrders");
+            disposeCurrentFrame();
+            new ListAssignedOrders();
         }
 
 //        if (e.getSource() == viewDeliverables) {

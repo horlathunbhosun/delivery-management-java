@@ -1,5 +1,8 @@
 package org.olatunbosun;
 
+import org.olatunbosun.Guis.LoginScreenGui;
+import org.olatunbosun.session.SessionData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -92,8 +95,15 @@ public class Utility {
         StringBuilder randomStringBuilder = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
-            // Generate a random character and append it to the string
-            char randomChar = (char) ('a' + Math.random() * ('z' - 'a' + 1));
+            // Generate a random character or digit and append it to the string
+            char randomChar;
+            if (Math.random() < 0.5) {
+                // Generate a random digit (0-9)
+                randomChar = (char) ('0' + Math.random() * ('9' - '0' + 1));
+            } else {
+                // Generate a random lowercase letter (a-z)
+                randomChar = (char) ('a' + Math.random() * ('z' - 'a' + 1));
+            }
             randomStringBuilder.append(randomChar);
         }
 
@@ -111,5 +121,15 @@ public class Utility {
 
         return dateFormat.format($date);
     }
+
+    public static void checkSessionAndHandleExpiration(JFrame frame, SessionData sessionData) {
+        if (sessionData == null) {
+            JOptionPane.showMessageDialog(frame, "Session expired, please login again", "Error", JOptionPane.ERROR_MESSAGE);
+            new LoginScreenGui();
+            frame.dispose();
+        }
+    }
+
+
 
 }

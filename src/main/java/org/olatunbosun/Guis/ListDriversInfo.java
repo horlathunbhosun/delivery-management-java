@@ -17,7 +17,7 @@ public class ListDriversInfo extends JFrame {
     public ListDriversInfo(){
         super("List of Drivers");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
 
         // Create a panel to hold the label and table
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -66,7 +66,8 @@ public class ListDriversInfo extends JFrame {
         addStaticUserData();
 
         // Set frame properties
-        setSize(700, 500);
+        setSize(700, 600);
+
         setVisible(true);
 
 
@@ -141,13 +142,12 @@ public class ListDriversInfo extends JFrame {
     }
 
 
-    private static void assignOrder(int userId, JButton button) {
+    private static void assignOrder(int driverId, JButton button) {
         // Implement the logic to assign the order to a driver
         // You can open a dialog or perform any other necessary actions here
         SessionData sessionData = new SessionData();
-        sessionData.setUserId(userId);
+        sessionData.setUserId(driverId);
         SessionManager.createSession("assignOrder", sessionData);
-        System.out.println("Order " + userId + " assigned to driver");
         System.out.println(SessionManager.getSession("assignOrder").getUserId());
         // Open the new GUI
         SwingUtilities.invokeLater(() -> {

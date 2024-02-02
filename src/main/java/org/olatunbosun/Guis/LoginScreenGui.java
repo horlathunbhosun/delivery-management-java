@@ -118,14 +118,14 @@ public class LoginScreenGui extends JFrame implements ActionListener {
             // Check the result and show appropriate message
             if (response.equals("Login Successful")) {
                 // Show success message
-                JOptionPane.showMessageDialog(null, response, "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, response, "Success", JOptionPane.INFORMATION_MESSAGE);
                 // Go to the next screen
                 new HomeGui();
                 // Close the current screen
                 dispose();
             } else {
                 // Show error message
-                JOptionPane.showMessageDialog(null, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

@@ -98,6 +98,9 @@ public class ListOrderGui extends JFrame {
 
 
     private void userOrderData() {
+
+        Utility.checkSessionAndHandleExpiration(this, sessionData);
+
         // Add data to the table from controller
         Vector<Vector<Object>> data = OrderController.getUserOrders(sessionData.getUserId());
         for (Vector<Object> row : data) {

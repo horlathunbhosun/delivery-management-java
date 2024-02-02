@@ -85,11 +85,11 @@ public class AddProductGui extends JFrame implements ActionListener {
            String response = ProductController.insertDataProduct(products);
             // Check the result and show appropriate message
             if (response.equals("Product Added Successful")) {
-                JOptionPane.showMessageDialog(null, response, "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, response, "Success", JOptionPane.INFORMATION_MESSAGE);
                 new ListProductsGui();
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + response, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
