@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class MenuGui extends JMenuBar implements ActionListener {
 
     JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
-    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, addProduct, viewProducts;
+    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , addProduct, viewProducts;
     Box horizontalBox;
     SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
@@ -41,6 +41,8 @@ public class MenuGui extends JMenuBar implements ActionListener {
         viewProfile = new JMenuItem("View Profile");
         editProfile = new JMenuItem("Edit Profile");
         generateReport = new JMenuItem("Generate Report");
+        assignOrdersToDrivers = new JMenuItem("Assign Orders to Drivers");
+
 
         viewProfile.addActionListener(this);
         editProfile.addActionListener(this);
@@ -55,11 +57,12 @@ public class MenuGui extends JMenuBar implements ActionListener {
         productsMenu.add(viewProducts);
         addProduct.addActionListener(this);
         viewProducts.addActionListener(this);
-
+        assignOrdersToDrivers.addActionListener(this);
 
         ordersMenu.add(createOrders);
         ordersMenu.add(viewOrders);
         missionOverviewMenu.add(generateReport);
+        missionOverviewMenu.add(assignOrdersToDrivers);
         driversMenu.add(viewDeliverables);
         driversMenu.add(completeDeliverable);
 
@@ -82,6 +85,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
         if (userRole.equals("scheduler")){
             profileMenu.setVisible(false);
             ordersMenu.setVisible(false);
+            createOrders.setVisible(false);
             missionOverviewMenu.setVisible(true);
             driversMenu.setVisible(false);
             productsMenu.setVisible(true);
@@ -157,6 +161,12 @@ public class MenuGui extends JMenuBar implements ActionListener {
             }else{
                 new ListOrderSchedulerGui();
             }
+        }
+
+        if (e.getSource() == assignOrdersToDrivers) {
+            System.out.println("assignOrdersToDrivers");
+            disposeCurrentFrame();
+            new ListDriversInfo();
         }
 
 //        if (e.getSource() == viewDeliverables) {

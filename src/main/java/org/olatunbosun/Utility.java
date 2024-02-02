@@ -88,6 +88,18 @@ public class Utility {
     	return java.util.UUID.randomUUID().toString();
     }
 
+    public static String generateRandomString(int length) {
+        StringBuilder randomStringBuilder = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            // Generate a random character and append it to the string
+            char randomChar = (char) ('a' + Math.random() * ('z' - 'a' + 1));
+            randomStringBuilder.append(randomChar);
+        }
+
+        return randomStringBuilder.toString();
+    }
+
 
     public static String  getDateFormatted(Date $date) {
         // Define the desired date format pattern

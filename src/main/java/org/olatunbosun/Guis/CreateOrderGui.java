@@ -161,7 +161,7 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
             CreateOrderItem createOrderItem = new CreateOrderItem(productId, Integer.parseInt(quantity.getText()));
             // generate order id randomly
-            String orderNumber = Utility.generateOrderNumber();
+            String orderNumber = Utility.generateRandomString(5);
 
             String date = Utility.getDateFormatted(dateChooser.getDate());
 

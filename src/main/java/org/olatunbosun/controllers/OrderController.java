@@ -153,6 +153,54 @@ public class OrderController {
     }
 
 
+    public static Vector<Vector<Object>> getAllUserOrders() {
+        Vector<Vector<Object>> orderData = new Vector<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+
+            String selectOrdersSql =  "SELECT o.*, us.fullname, oi.product_id, oi.quantity, oi.date_created, p.product_name " +
+                    "FROM orders o " +
+                    "INNER JOIN users us ON o.user_id = us.id " +
+                    "INNER JOIN order_items oi ON o.id = oi.order_id " +
+                    "INNER JOIN products p ON oi.product_id = p.id " +
+                    "ORDER BY o.id DESC";
+
+            PreparedStatement selectStatement = connection.prepareStatement(selectOrdersSql);
+            try (selectStatement) {
+                // Set values for the placeholders
+                ResultSet resultSetUserOrders = selectStatement.executeQuery();
+                try (resultSetUserOrders) {
+                    while (resultSetUserOrders.next()) {
+
+                        // Extract data from the result set
+                        String fullname = resultSetUserOrders.getString("fullname");
+                        String orderNumber = resultSetUserOrders.getString("order_number");
+                        String deliveryAddress = resultSetUserOrders.getString("delivery_address");
+                        String productName = resultSetUserOrders.getString("product_name");
+
+                        // Add the data to the collection
+                        Vector<Object> row = new Vector<>();
+                        row.add(false);
+                        row.add(orderNumber);
+                        row.add(fullname);
+                        row.add(deliveryAddress);
+                        row.add(productName);
+                        orderData.add(row);
+                    }
+
+                    if (orderData.isEmpty()) {
+                        System.out.println("No Order found");
+                    }
+                    System.out.println("Order Data: " + orderData);
+                    return orderData;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
 
 
 }

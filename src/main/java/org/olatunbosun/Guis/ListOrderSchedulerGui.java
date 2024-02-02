@@ -1,24 +1,27 @@
 package org.olatunbosun.Guis;
 
+import org.olatunbosun.controllers.OrderController;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
-public class ListOrderSchedulerGui extends JFrame {
+public class ListOrderSchedulerGui extends JFrame implements ActionListener{
 
 
     private JTable userTable;
     private DefaultTableModel tableModel;
-
+    private JButton submitButton;
 
     public ListOrderSchedulerGui(){
         super("List Orders Page");
 
 
-        setLayout(null);
+//        setLayout(null);
 
 //        setLayout(new FlowLayout());
 
@@ -30,7 +33,7 @@ public class ListOrderSchedulerGui extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Create a label for the title
-        JLabel titleLabel = new JLabel("Drivers Information");
+        JLabel titleLabel = new JLabel("Order Information");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -38,7 +41,7 @@ public class ListOrderSchedulerGui extends JFrame {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Create columns for the table
-        String[] columns = { "Select","ID", "Customer Information", "Address of Delivery", "Product", "Delivery Sequence"};
+        String[] columns = { "Select","ID", "Customer Information", "Address of Delivery", "Product"};
         tableModel = new DefaultTableModel(null, columns){
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -68,13 +71,9 @@ public class ListOrderSchedulerGui extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Create a button to retrieve selected IDs
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                submitSelectedRows();
-            }
-        });
+         submitButton = new JButton("Assign Orders");
+        submitButton.addActionListener(this);
+        mainPanel.add(submitButton, BorderLayout.SOUTH);
         // Add the panel to the frame
         add(mainPanel);
 
@@ -82,17 +81,20 @@ public class ListOrderSchedulerGui extends JFrame {
         setJMenuBar(menu);
 
         // Add static data to the table
-//        addStaticUserData();
+          userOrderData();
 
         // Set frame properties
-        setSize(700, 500);
+        setSize(700, 600);
         setVisible(true);
     }
 
     private void submitSelectedRows() {
         for (int i = 0; i < userTable.getRowCount(); i++) {
+            System.out.println(userTable.getValueAt(i, 0));
             boolean isSelected = (boolean) userTable.getValueAt(i, 0);
-            if (isSelected) {
+            System.out.println("Selected: " + isSelected);
+            if (!isSelected  && isSelected) {
+                // Rest of your code
                 // Get the ID from the second column (index 1)
                 int id = (int) userTable.getValueAt(i, 1);
                 System.out.println("Selected ID: " + id);
@@ -101,13 +103,32 @@ public class ListOrderSchedulerGui extends JFrame {
                 System.out.println("Delivery Sequence: " + deliverySequence);
                 // Add your logic here to process the selected ID and Delivery Sequence
             }
+//            if (isSelected) {
+//
+//            }
         }
     }
 
 
-    
+    private void userOrderData() {
+
+        Vector<Vector<Object>> data = OrderController.getAllUserOrders();
+        for (Vector<Object> row : data) {
+            tableModel.addRow(row);
+        }
+    }
 
 
-
-
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+//
+        if (e.getSource() == submitButton ) {
+            submitSelectedRows();
+        }
+    }
 }

@@ -151,10 +151,10 @@ public class ListDriversInfo extends JFrame {
         System.out.println(SessionManager.getSession("assignOrder").getUserId());
         // Open the new GUI
         SwingUtilities.invokeLater(() -> {
-            CreateOrderGui createOrderGui = new CreateOrderGui();
+            ListOrderSchedulerGui listOrderSchedulerGui = new ListOrderSchedulerGui();
             // Assuming that CreateOrderGui extends JFrame
-            createOrderGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            createOrderGui.setVisible(true);
+            listOrderSchedulerGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            listOrderSchedulerGui.setVisible(true);
 
             // Close the current GUI
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(button);
