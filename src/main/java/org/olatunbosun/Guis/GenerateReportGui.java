@@ -104,6 +104,8 @@ public class GenerateReportGui extends JFrame implements ActionListener {
             String response = OrderController.GenerateReportDocument(formattedDate);
             if (response.equals("Document generated successfully")) {
                 JOptionPane.showMessageDialog(this, response, "Success", JOptionPane.INFORMATION_MESSAGE);
+                new HomeGui();
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, response, "Error", JOptionPane.ERROR_MESSAGE);
             }
