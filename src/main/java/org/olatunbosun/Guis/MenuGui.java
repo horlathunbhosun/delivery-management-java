@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class MenuGui extends JMenuBar implements ActionListener {
 
     JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
-    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , viewAssignedOrders , addProduct, viewProducts;
+    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , viewAssignedOrders , addProduct, viewProducts, homeMenuItems, logoutMenuItems;
     Box horizontalBox;
     SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
@@ -44,6 +44,9 @@ public class MenuGui extends JMenuBar implements ActionListener {
         assignOrdersToDrivers = new JMenuItem("Assign Orders to Drivers");
         viewAssignedOrders = new JMenuItem("View Assigned Orders");
 
+        homeMenuItems = new JMenuItem("Home");
+        logoutMenuItems = new JMenuItem("Logout");
+
 
         viewProfile.addActionListener(this);
         editProfile.addActionListener(this);
@@ -70,10 +73,14 @@ public class MenuGui extends JMenuBar implements ActionListener {
         missionOverviewMenu.add(viewAssignedOrders);
         driversMenu.add(viewDeliverables);
         driversMenu.add(completeDeliverable);
-
-
+        homeMenu.add(homeMenuItems);
+        homeMenuItems.addActionListener(this);
 
         logoutMenu = new JMenu("Logout");
+
+        logoutMenu.add(logoutMenuItems);
+
+        logoutMenuItems.addActionListener(this);
 
 //         horizontalBox = Box.createHorizontalBox();
 
@@ -88,7 +95,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         }
         if (userRole.equals("scheduler")){
-            profileMenu.setVisible(false);
+            profileMenu.setVisible(true);
             ordersMenu.setVisible(false);
             createOrders.setVisible(false);
             missionOverviewMenu.setVisible(true);
@@ -98,9 +105,9 @@ public class MenuGui extends JMenuBar implements ActionListener {
         }
 
         if (userRole.equals("driver")){
-            profileMenu.setVisible(false);
+            profileMenu.setVisible(true);
             createOrders.setVisible(false);
-            ordersMenu.setVisible(true);
+            ordersMenu.setVisible(false);
             missionOverviewMenu.setVisible(false);
             driversMenu.setVisible(true);
             productsMenu.setVisible(false);
@@ -127,6 +134,12 @@ public class MenuGui extends JMenuBar implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == homeMenuItems){
+            System.out.println("homeMenuItems");
+            disposeCurrentFrame();
+            new HomeGui();
+        }
 //
         if (e.getSource() == viewProfile) {
             System.out.println("viewProfile");
@@ -185,29 +198,17 @@ public class MenuGui extends JMenuBar implements ActionListener {
             new GenerateReportGui();
         }
 
-//        if (e.getSource() == viewDeliverables) {
-//            System.out.println("viewDeliverables");
-//            disposeCurrentFrame();
-//            new ViewDeliverablesGui();
-//        }
+        if (e.getSource() == logoutMenuItems){
+          String response =  SessionManagerMain.logoutUser(this);
+            if (response.equals("Logout Successful")) {
+                JOptionPane.showMessageDialog(this, "User successfully logged out", "Success", JOptionPane.INFORMATION_MESSAGE);
+                disposeCurrentFrame();
+                new LoginScreenGui();
+            }else{
+                JOptionPane.showMessageDialog(this,  response, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
-//        if (e.getSource() == completeDeliverable) {
-//            System.out.println("completeDeliverable");
-//            disposeCurrentFrame();
-//            new CompleteDeliverableGui();
-//        }
-
-//        if (e.getSource() == generateReport) {
-//            System.out.println("generateReport");
-//            disposeCurrentFrame();
-//            new GenerateReportGui();
-//        }
-
-//        if (e.getSource() == logoutMenu) {
-//            System.out.println("logoutMenu");
-//            disposeCurrentFrame();
-//            new LoginGui();
-//        }
     }
 
     private void disposeCurrentFrame() {

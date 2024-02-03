@@ -52,8 +52,8 @@ public class ProfileGui extends JFrame  implements ActionListener {
         truckNumberLabel.setVisible(false);
 
 
-        truckCapacityLabel = new JLabel("Truck Capacity(kg): ");
-        truckCapacityLabel.setBounds(10, 250, 170, 50);
+        truckCapacityLabel = new JLabel("Truck Capacity: ");
+        truckCapacityLabel.setBounds(10, 300, 170, 50);
         truckCapacityLabel.setVisible(false);
 
 
@@ -77,22 +77,13 @@ public class ProfileGui extends JFrame  implements ActionListener {
 
 
         phoneNumber = new JTextField();
-        phoneNumber.setBounds(120, 200, 250, 50);
+        phoneNumber.setBounds(120, 150, 250, 50);
         phoneNumber.setText(sessionData.getPhoneNumber());
         phoneNumber.setEditable(false);
         String[] rolesList = { "customer", "scheduler", "driver" };
 
-
-        truckNumber = new JTextField();
-        truckNumber.setBounds(120, 300, 250, 50);
-        truckNumber.setVisible(false);
-
-        truckCapacity = new JTextField();
-        truckCapacity.setBounds(120, 350, 250, 50);
-        truckCapacity.setVisible(false);
-
         roles = new JComboBox<>(rolesList);
-        roles.setBounds(120, 250, 250, 50);
+        roles.setBounds(120, 200, 250, 50);
         System.out.println(sessionData.getRole());
         roles.setSelectedItem(sessionData.getRole());
         roles.setEnabled(false);
@@ -105,6 +96,36 @@ public class ProfileGui extends JFrame  implements ActionListener {
                 return this;
             }
         });
+
+
+        if (sessionData.getRole().equals("driver")) {
+            truckNumberLabel.setVisible(true);
+            truckNumber = new JTextField();
+            truckNumber.setBounds(120, 250, 250, 50);
+            truckNumber.setText(sessionData.getTruckNumber());
+            truckNumber.setVisible(true);
+            truckNumber.setEditable(false);
+
+            truckCapacityLabel.setVisible(true);
+            truckCapacity = new JTextField();
+            truckCapacity.setBounds(120, 300, 250, 50);
+            truckCapacity.setText(String.valueOf(sessionData.getTruckCapacity()));
+            truckCapacity.setVisible(true);
+            truckCapacity.setEditable(false);
+            contentPane.add(truckNumber);
+            contentPane.add(truckCapacity);
+        }
+
+
+
+        truckNumber = new JTextField();
+        truckNumber.setBounds(120, 250, 250, 50);
+        truckNumber.setVisible(false);
+
+        truckCapacity = new JTextField();
+        truckCapacity.setBounds(120, 250, 250, 50);
+        truckCapacity.setVisible(false);
+
 
 
         contentPane.add(fullName);

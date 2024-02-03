@@ -198,7 +198,7 @@ public class RegistrationGui extends JFrame  implements ActionListener {
             }
             //pass the data to the registration model constructor
             Registration registration = new Registration(fullName.getText(), email.getText(), new String(passwordField.getPassword()), phoneNumber.getText(), role, truckNum, truckCap);
-            System.out.println(registration);
+//            System.out.println(registration);
             //save the data to the database
           String response =  RegistrationController.insertData(registration);
 

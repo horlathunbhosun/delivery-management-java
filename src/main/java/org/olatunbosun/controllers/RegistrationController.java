@@ -3,6 +3,7 @@ package org.olatunbosun.controllers;
 import org.olatunbosun.BCrypt;
 import org.olatunbosun.database.MysqlConnection;
 import org.olatunbosun.models.Registration;
+import org.olatunbosun.models.UserUpdateInformation;
 
 import java.sql.*;
 
@@ -43,5 +44,8 @@ public class RegistrationController {
         }
 
     }
+
+
+
 
 }

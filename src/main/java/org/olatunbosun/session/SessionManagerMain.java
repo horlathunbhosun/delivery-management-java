@@ -2,6 +2,8 @@ package org.olatunbosun.session;
 
 import com.google.gson.Gson;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -43,7 +45,35 @@ public class SessionManagerMain {
     }
 
 
-    public static void logoutUser() {
-        SessionData loggedInUser = null;
+    public static String logoutUser(Component parentComponent ){
+
+//        SessionData loggedInUser = null;
+
+        int option = JOptionPane.showConfirmDialog(
+                parentComponent,
+                "Are you sure you want to logout?",
+                "Logout",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                if (file.delete()) {
+                    return "User successfully logged out.";
+                } else {
+                    JOptionPane.showMessageDialog(parentComponent, "Logout failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return "Logout failed. Please try again.";
+
+                }
+            } else {
+                JOptionPane.showMessageDialog(parentComponent, "User is already logged out.", "Error", JOptionPane.ERROR_MESSAGE);
+                return "User is already logged out.";
+            }
+        }else {
+            return "User is still logged in.";
+        }
+
+
     }
 }
