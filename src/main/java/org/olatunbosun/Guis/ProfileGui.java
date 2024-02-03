@@ -134,6 +134,8 @@ public class ProfileGui extends JFrame  implements ActionListener {
         contentPane.add(roles);
         contentPane.add(truckNumber);
         contentPane.add(truckCapacity);
+        contentPane.setBackground(new Color(159, 167, 192));
+
 
 
 //        contentPane.set(menu)

@@ -160,10 +160,12 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
         contentPane.add(truckCapacity);
         contentPane.add(updateProfileButton);
 
+        contentPane.setBackground(new Color(159, 167, 192));
 
 //        contentPane.set(menu)
 
 
+        menu.setBackground(new Color(159, 167, 192));
 
         setContentPane(contentPane);
         contentPane.setLayout(null);

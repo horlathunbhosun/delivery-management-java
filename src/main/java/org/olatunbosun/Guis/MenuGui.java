@@ -5,6 +5,7 @@ import org.olatunbosun.session.SessionManager;
 import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -123,6 +124,8 @@ public class MenuGui extends JMenuBar implements ActionListener {
         add(productsMenu);
         add(missionOverviewMenu);
         add(driversMenu);
+//        contentPane.setBackground();
+
 
 //        add(Box.createHorizontalGlue());
         add(logoutMenu);
