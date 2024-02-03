@@ -54,6 +54,10 @@ public class MenuGui extends JMenuBar implements ActionListener {
         createOrders.addActionListener(this);
         viewOrders.addActionListener(this);
 
+
+        viewDeliverables.addActionListener(this);
+        completeDeliverable.addActionListener(this);
+
         profileMenu.add(viewProfile);
         profileMenu.add(editProfile);
 
@@ -200,13 +204,25 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         if (e.getSource() == logoutMenuItems){
           String response =  SessionManagerMain.logoutUser(this);
-            if (response.equals("Logout Successful")) {
-                JOptionPane.showMessageDialog(this, "User successfully logged out", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (response.equals("User successfully logged out.")) {
+                JOptionPane.showMessageDialog(this, response, "Success", JOptionPane.INFORMATION_MESSAGE);
                 disposeCurrentFrame();
                 new LoginScreenGui();
             }else{
                 JOptionPane.showMessageDialog(this,  response, "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+
+        if (e.getSource() == viewDeliverables) {
+            System.out.println("viewDeliverables");
+            disposeCurrentFrame();
+            new AssignedDeliverableGui();
+        }
+
+        if (e.getSource() == completeDeliverable) {
+            System.out.println("completeDeliverable");
+//            disposeCurrentFrame();
+//            new CompleteDeliverableGui();
         }
 
     }

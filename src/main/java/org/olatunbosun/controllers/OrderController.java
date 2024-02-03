@@ -517,6 +517,65 @@ public class OrderController {
 
 
 
+    public static Vector<Vector<Object>> getDriverDeliverable(int driverId) {
+        Vector<Vector<Object>> userData = new Vector<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+
+            String selectOrdersSql =
+                    "SELECT od.*, ors.*,us.fullname, dr.fullname AS driverName, oi.product_id, oi.quantity, oi.date_created " +
+                            "FROM order_delivery od " +
+                            "INNER JOIN orders ors ON od.order_id = ors.id " +
+                            "INNER JOIN users us ON ors.user_id = us.id " +
+                            "INNER JOIN users dr ON od.driver_id = dr.id " +
+                            "INNER JOIN order_items oi ON od.order_id = oi.order_id " +
+                            "WHERE od.driver_id = ? AND od.order_status = 'assigned_to_driver'" +
+                            "ORDER BY od.created_at DESC";
+
+//            String sql = "SELECT * FROM users WHERE role = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersSql)) {
+                // Set values for the placeholders
+                preparedStatement.setInt(1, driverId);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        // Extract data from the result set
+                        int id = resultSet.getInt("id");
+                        String orderNumber = resultSet.getString("order_number");
+                        String fullName = resultSet.getString("fullname");
+                        String deliveryAddress = resultSet.getString("delivery_address");
+                        String deliveryDate = resultSet.getString("delivery_date");
+                        String status = resultSet.getString("order_status");
+                        int sequence = resultSet.getInt("sequence");
+
+                        // Add the data to the collection
+                        Vector<Object> row = new Vector<>();
+                        row.add(orderNumber);
+                        row.add(fullName);
+                        row.add(deliveryAddress);
+                        row.add(deliveryDate);
+                        row.add(sequence);
+                        row.add(status);
+                        row.add(id);
+                        userData.add(row);
+                    }
+
+                    if (userData.isEmpty()) {
+                        System.out.println("No Deliverable found for this driver");
+                    }
+                    return userData;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
+
+
+
 
 
 
