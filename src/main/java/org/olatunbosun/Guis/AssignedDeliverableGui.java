@@ -23,14 +23,8 @@ public class AssignedDeliverableGui extends JFrame implements ActionListener {
     public AssignedDeliverableGui(){
         super("List of Drivers Assigned to Deliverables");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setLocationRelativeTo(null);
-
         // Create a panel to hold the label and table
         JPanel mainPanel = new JPanel(new BorderLayout());
-
-
-
-
 
         // Create a label for the title
         JLabel titleLabel = new JLabel("Deliverable assigned to driver with name " + sessionData.getFullName());
@@ -68,6 +62,9 @@ public class AssignedDeliverableGui extends JFrame implements ActionListener {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Add the panel to the frame
         add(mainPanel);
+
+        mainPanel.setBackground(new Color(159, 167, 192));
+
 
         //set menu bar
         setJMenuBar(menu);

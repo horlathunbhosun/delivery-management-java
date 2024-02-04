@@ -7,6 +7,7 @@ import org.olatunbosun.session.SessionManagerMain;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.Vector;
 
@@ -38,15 +39,29 @@ public class ListOrderGuiCustomer extends JFrame {
         tableModel = new DefaultTableModel(null, columns);
         userTable = new JTable(tableModel);
 
+        // Set the table header
+        JTableHeader tableHeader = userTable.getTableHeader();
+        tableHeader.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font for header
+        tableHeader.setBackground(Color.LIGHT_GRAY); // Adjust background color for header
+
+        userTable.setGridColor(Color.BLACK);
+        userTable.setShowGrid(true);
+        userTable.setIntercellSpacing(new Dimension(1, 1)); // Adjust spacing between cells
+
+        JScrollPane scrollPane = new JScrollPane(userTable);
+
         // Add the table to the panel
-        mainPanel.add(new JScrollPane(userTable), BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Add the panel to the frame's content pane
         getContentPane().add(mainPanel);
 
+        mainPanel.setBackground(new Color(159, 167, 192));
+
         setJMenuBar(menu);
         // Set frame properties
-        setSize(800, 500);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 

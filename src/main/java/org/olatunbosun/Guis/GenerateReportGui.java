@@ -60,6 +60,7 @@ public class GenerateReportGui extends JFrame implements ActionListener {
         contentPane.add(dateChooser);
 
         contentPane.add(generateReportButton);
+        contentPane.setBackground(new Color(159, 167, 192));
 
 
         setContentPane(contentPane);

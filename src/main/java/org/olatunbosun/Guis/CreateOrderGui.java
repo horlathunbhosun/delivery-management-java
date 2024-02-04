@@ -65,6 +65,8 @@ public class CreateOrderGui extends JFrame implements ActionListener {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 10, 200, 10)); // Add some padding
 
+        mainPanel.setBackground(new Color(159, 167, 192));
+
         add(mainPanel);
         setJMenuBar(menu);
         setVisible(true);

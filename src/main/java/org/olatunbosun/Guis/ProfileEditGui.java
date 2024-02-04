@@ -121,14 +121,12 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
             truckNumber.setBounds(120, 250, 250, 50);
             truckNumber.setText(sessionData.getTruckNumber());
             truckNumber.setVisible(true);
-//            truckNumber.setEditable(false);
 
             truckCapacityLabel.setVisible(true);
             truckCapacity = new JTextField();
             truckCapacity.setBounds(120, 300, 250, 50);
             truckCapacity.setText(String.valueOf(sessionData.getTruckCapacity()));
             truckCapacity.setVisible(true);
-//            truckCapacity.setEditable(false);
             contentPane.add(truckNumber);
             contentPane.add(truckCapacity);
         }
@@ -162,7 +160,6 @@ public class ProfileEditGui extends JFrame  implements ActionListener {
 
         contentPane.setBackground(new Color(159, 167, 192));
 
-//        contentPane.set(menu)
 
 
         menu.setBackground(new Color(159, 167, 192));
