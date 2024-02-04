@@ -8,6 +8,10 @@ import org.olatunbosun.database.MysqlConnection;
 import org.olatunbosun.models.AssignOrderDelivery;
 import org.olatunbosun.models.CreateOrder;
 import org.olatunbosun.models.Order;
+import org.olatunbosun.models.UserUpdateInformation;
+import org.olatunbosun.session.SessionData;
+import org.olatunbosun.session.SessionManager;
+import org.olatunbosun.session.SessionManagerMain;
 
 import java.io.FileOutputStream;
 import java.sql.*;
@@ -542,7 +546,7 @@ public class OrderController {
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         // Extract data from the result set
-                        int id = resultSet.getInt("id");
+                        int id = resultSet.getInt("order_id");
                         String orderNumber = resultSet.getString("order_number");
                         String fullName = resultSet.getString("fullname");
                         String deliveryAddress = resultSet.getString("delivery_address");
@@ -565,6 +569,7 @@ public class OrderController {
                     if (userData.isEmpty()) {
                         System.out.println("No Deliverable found for this driver");
                     }
+                    System.out.println("User Data: " + userData);
                     return userData;
                 }
             }
@@ -574,6 +579,158 @@ public class OrderController {
         }
     }
 
+
+
+//    public static String markOrderAsDelivered(int driverId, int orderId) {
+//        Connection connection = MysqlConnection.getConnection();
+//        // Prepare the SQL statement with placeholders
+//        String sql = "UPDATE orders SET order_status = ? WHERE id = ?";
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+//            // Set values for the placeholders
+//            preparedStatement.setString(1, "delivered");
+//            preparedStatement.setInt(2, orderId);
+//
+//            // Execute the statement
+//            int rowsAffected = preparedStatement.executeUpdate();
+//            System.out.println(rowsAffected + " row(s) affected.");
+//            if (rowsAffected > 0) {
+//                // Prepare the SQL statement to fetch the updated data
+//                String sqfetchSqll = "UPDATE order_delivery SET order_status = ?  WHERE order_id = ? AND driver_id = ?";
+//
+//                try (PreparedStatement fetchStatement = connection.prepareStatement(sqfetchSqll)) {
+//                    fetchStatement.setString(1, "delivered");
+//                    fetchStatement.setInt(2, orderId);
+//                    fetchStatement.setInt(3, driverId);
+//
+//                    int updateRowsAffected = fetchStatement.executeUpdate();
+//                    if (updateRowsAffected > 0) {
+//                        return "Marked Completed Successful";
+//                    } else {
+//                        System.out.println("here1");
+//                        return "Marked completed Failed\n Please Try Again";
+//                    }
+//                }
+//            } else {
+//                System.out.println("here");
+//                return "Marked completed Failed\n Please Try Again";
+//            }
+//        }catch (SQLException e) {
+//            System.out.println("Error: " + e.getMessage());
+//            return "Error: " + e.getMessage();
+//        }
+//    }
+
+    public static String markOrderAsDelivered(int driverId, int orderId) {
+        Connection connection = MysqlConnection.getConnection();
+        // Prepare the SQL statements with placeholders
+        String updateOrderSql = "UPDATE orders SET order_status = ? WHERE id = ?";
+        String updateDeliverySql = "UPDATE order_delivery SET order_status = ? WHERE order_id = ? AND driver_id = ?";
+
+        try {
+            connection.setAutoCommit(false); // Start transaction
+
+            // Update order status
+            try (PreparedStatement orderStatement = connection.prepareStatement(updateOrderSql)) {
+                orderStatement.setString(1, "delivered");
+                orderStatement.setInt(2, orderId);
+
+                System.out.println("Order Statement: " + orderStatement.toString());
+                int orderRowsAffected = orderStatement.executeUpdate();
+
+                if (orderRowsAffected <= 0) {
+                    throw new SQLException("Failed to update order status");
+                }
+            }
+
+            // Update delivery status
+            try (PreparedStatement deliveryStatement = connection.prepareStatement(updateDeliverySql)) {
+                deliveryStatement.setString(1, "delivered");
+                deliveryStatement.setInt(2, orderId);
+                deliveryStatement.setInt(3, driverId);
+
+                int deliveryRowsAffected = deliveryStatement.executeUpdate();
+
+                if (deliveryRowsAffected <= 0) {
+                    throw new SQLException("Failed to update delivery status");
+                }
+            }
+
+            connection.commit(); // Commit the transaction
+            return "Order marked as delivered successfully";
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); // Rollback in case of any exceptions
+            } catch (SQLException rollbackException) {
+                System.out.println("Rollback Error: " + rollbackException.getMessage());
+            }
+
+            System.out.println("Error: " + e.getMessage());
+            return "Marked completed Failed. Please Try Again.";
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Reset auto-commit to default
+                connection.close();
+            } catch (SQLException closeException) {
+                System.out.println("Error closing connection: " + closeException.getMessage());
+            }
+        }
+    }
+
+
+    public static Vector<Vector<Object>> getDeliveredMarkedCompleted(int driverId) {
+        Vector<Vector<Object>> userData = new Vector<>();
+
+        try (Connection connection = MysqlConnection.getConnection()) {
+            // Prepare the SQL statement with placeholders
+
+            String selectOrdersSql =
+                    "SELECT od.*, ors.*,us.fullname, dr.fullname AS driverName, oi.product_id, oi.quantity, oi.date_created " +
+                            "FROM order_delivery od " +
+                            "INNER JOIN orders ors ON od.order_id = ors.id " +
+                            "INNER JOIN users us ON ors.user_id = us.id " +
+                            "INNER JOIN users dr ON od.driver_id = dr.id " +
+                            "INNER JOIN order_items oi ON od.order_id = oi.order_id " +
+                            "WHERE od.driver_id = ? AND od.order_status = 'delivered'" +
+                            "ORDER BY od.created_at DESC";
+
+//            String sql = "SELECT * FROM users WHERE role = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersSql)) {
+                // Set values for the placeholders
+                preparedStatement.setInt(1, driverId);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        // Extract data from the result set
+                        int id = resultSet.getInt("order_id");
+                        String orderNumber = resultSet.getString("order_number");
+                        String fullName = resultSet.getString("fullname");
+                        String deliveryAddress = resultSet.getString("delivery_address");
+                        String deliveryDate = resultSet.getString("delivery_date");
+                        String status = resultSet.getString("order_status");
+
+                        // Add the data to the collection
+                        Vector<Object> row = new Vector<>();
+                        row.add(orderNumber);
+                        row.add(fullName);
+                        row.add(deliveryAddress);
+                        row.add(deliveryDate);
+                        row.add(status);
+                        userData.add(row);
+                    }
+
+                    if (userData.isEmpty()) {
+                        System.out.println("No Delivered order found for this driver");
+                    }
+                    System.out.println("User Data: Delivered  " + userData);
+                    return userData;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null; // or return an empty Vector if you prefer
+        }
+    }
 
 
 

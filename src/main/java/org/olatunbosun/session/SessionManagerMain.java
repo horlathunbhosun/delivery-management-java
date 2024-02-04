@@ -76,4 +76,25 @@ public class SessionManagerMain {
 
 
     }
+
+    public static String logoutUserWithOutDialog(Component parentComponent ){
+
+//        SessionData loggedInUser = null;
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                if (file.delete()) {
+                    return "User successfully logged out.";
+                } else {
+//                    JOptionPane.showMessageDialog(parentComponent, "Logout failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return "Logout failed. Please try again.";
+                }
+            } else {
+//                JOptionPane.showMessageDialog(parentComponent, "User is already logged out.", "Error", JOptionPane.ERROR_MESSAGE);
+                return "User is already logged out.";
+            }
+
+
+
+    }
 }

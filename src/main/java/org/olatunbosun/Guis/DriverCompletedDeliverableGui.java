@@ -11,16 +11,15 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.Vector;
 
-public class ListAssignedOrders extends JFrame  {
-
+public class DriverCompletedDeliverableGui extends JFrame {
 
 
     private JTable userTable;
     private DefaultTableModel tableModel;
     SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
-    public ListAssignedOrders() {
-        super("List Assigned Orders Page");
+    public DriverCompletedDeliverableGui() {
+        super("List Completed Deliverable");
 
         // Create an instance of the Menu class
         MenuGui menu = new MenuGui();
@@ -29,7 +28,7 @@ public class ListAssignedOrders extends JFrame  {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Create a label for the title
-        JLabel titleLabel = new JLabel("Assigned Orders Information");
+        JLabel titleLabel = new JLabel("Completed Deliverable Information");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -37,10 +36,11 @@ public class ListAssignedOrders extends JFrame  {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Create columns for the table
-        String[] columns = {"Order Number", "Customer Name", "Driver Name", "Delivery Date", "Order Status"};
+        String[] columns = {"OrderNumber", "Customer Name", "Delivery Address", "Delivery Date","status"};
         tableModel = new DefaultTableModel(null, columns);
         userTable = new JTable(tableModel);
 
+        // Set the table header
         JTableHeader tableHeader = userTable.getTableHeader();
         tableHeader.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font for header
         tableHeader.setBackground(Color.LIGHT_GRAY); // Adjust background color for header
@@ -49,20 +49,20 @@ public class ListAssignedOrders extends JFrame  {
         userTable.setShowGrid(true);
         userTable.setIntercellSpacing(new Dimension(1, 1)); // Adjust spacing between cells
 
+        JScrollPane scrollPane = new JScrollPane(userTable);
 
         // Add the table to the panel
-        mainPanel.add(new JScrollPane(userTable), BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Add the panel to the frame's content pane
         getContentPane().add(mainPanel);
 
-
         mainPanel.setBackground(new Color(159, 167, 192));
-
 
         setJMenuBar(menu);
         // Set frame properties
-        setSize(800, 500);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
@@ -72,10 +72,10 @@ public class ListAssignedOrders extends JFrame  {
 
     private void userOrderData() {
 
-//        Utility.checkSessionAndHandleExpiration(this, sessionData);
+        Utility.checkSessionAndHandleExpiration(this, sessionData);
 
 
-        Vector<Vector<Object>> data = OrderController.getAllUserOrdersAssignedToDriver();
+        Vector<Vector<Object>> data = OrderController.getDeliveredMarkedCompleted(sessionData.getUserId());
         for (Vector<Object> row : data) {
             tableModel.addRow(row);
         }

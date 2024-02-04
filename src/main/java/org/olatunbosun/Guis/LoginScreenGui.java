@@ -80,6 +80,8 @@ public class LoginScreenGui extends JFrame implements ActionListener {
         contentPane.add(registrationButtonLabel);
 
 
+        contentPane.setBackground(new Color(159, 167, 192));
+
         setContentPane(contentPane);
 
         contentPane.setLayout(null);

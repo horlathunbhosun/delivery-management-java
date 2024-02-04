@@ -113,6 +113,55 @@ public class UserController {
     }
 
 
+    public static String changePassword(int userId, String oldPassword, String newPassword){
+            try {
+                Connection connection = MysqlConnection.getConnection();
+                // Prepare the SQL statement with placeholders
+                String sql = "SELECT * FROM users WHERE id = ?";
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    // Set values for the placeholders
+                    preparedStatement.setInt(1, userId);
+
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        if (resultSet.next()) {
+                            // Get the stored hashed password
+                            String storedHashedPassword = resultSet.getString("password");
+                            // Check if the old password matches the stored password
+                            boolean passwordCheck =  BCrypt.checkpw(oldPassword, storedHashedPassword);
+                            if (passwordCheck) {
+                                // If the old password is correct, hash the new password
+                                String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+                                // Prepare the SQL statement to update the password
+                                String updateSql = "UPDATE users SET password = ? WHERE id = ?";
+                                try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+                                    // Set values for the placeholders
+                                    updateStatement.setString(1, hashedNewPassword);
+                                    updateStatement.setInt(2, userId);
+                                    // Execute the statement
+                                    int rowsAffected = updateStatement.executeUpdate();
+                                    if (rowsAffected > 0) {
+                                        return "Password change successful";
+                                    } else {
+                                        return "Password change failed";
+                                    }
+                                }
+                            } else {
+                                return "Old password is incorrect";
+                            }
+                        } else {
+                            return "User not found";
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                return "Error: " + e.getMessage();
+            }
+        }
+
+
+
 
 
 

@@ -59,6 +59,7 @@ public class ListProductsGui extends JFrame  {
 
         // Add the panel to the frame
         add(mainPanel);
+        mainPanel.setBackground(new Color(159, 167, 192));
 
         //set menu bar
         setJMenuBar(menu);

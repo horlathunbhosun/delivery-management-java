@@ -76,6 +76,7 @@ public class ListOrderGui extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
 
 
+
         // Add the panel to the frame
 //        add(mainPanel);
         contentPanel.add(mainPanel, BorderLayout.CENTER);
@@ -83,6 +84,8 @@ public class ListOrderGui extends JFrame {
 
 
         getContentPane().setLayout(new BorderLayout());
+
+        contentPanel.setBackground(new Color(159, 167, 192));
 
         //set menu bar
         setJMenuBar(menu);

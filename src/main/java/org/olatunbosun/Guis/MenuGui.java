@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 public class MenuGui extends JMenuBar implements ActionListener {
 
     JMenu homeMenu,profileMenu,ordersMenu,missionOverviewMenu, driversMenu, logoutMenu, productsMenu;
-    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , viewAssignedOrders , addProduct, viewProducts, homeMenuItems, logoutMenuItems;
+    JMenuItem viewProfile, editProfile,viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport, assignOrdersToDrivers , viewAssignedOrders , addProduct, viewProducts, homeMenuItems, changePasswordItem, logoutMenuItems;
     Box horizontalBox;
     SessionData sessionData = SessionManagerMain.loadUserFromFile();
 
@@ -41,6 +41,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         viewProfile = new JMenuItem("View Profile");
         editProfile = new JMenuItem("Edit Profile");
+        changePasswordItem = new JMenuItem("Change Password");
         generateReport = new JMenuItem("Generate Report");
         assignOrdersToDrivers = new JMenuItem("Assign Orders to Drivers");
         viewAssignedOrders = new JMenuItem("View Assigned Orders");
@@ -51,6 +52,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         viewProfile.addActionListener(this);
         editProfile.addActionListener(this);
+        changePasswordItem.addActionListener(this);
 
         createOrders.addActionListener(this);
         viewOrders.addActionListener(this);
@@ -61,6 +63,7 @@ public class MenuGui extends JMenuBar implements ActionListener {
 
         profileMenu.add(viewProfile);
         profileMenu.add(editProfile);
+        profileMenu.add(changePasswordItem);
 
         productsMenu.add(addProduct);
         productsMenu.add(viewProducts);
@@ -143,43 +146,36 @@ public class MenuGui extends JMenuBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == homeMenuItems){
-            System.out.println("homeMenuItems");
             disposeCurrentFrame();
             new HomeGui();
         }
 //
         if (e.getSource() == viewProfile) {
-            System.out.println("viewProfile");
             disposeCurrentFrame();
             new ProfileGui();
         }
 
         if (e.getSource() == editProfile) {
-            System.out.println("editProfile");
             disposeCurrentFrame();
             new ProfileEditGui();
         }
 
         if (e.getSource() == createOrders) {
-            System.out.println("createOrders");
             disposeCurrentFrame();
             new CreateOrderGui();
         }
 
         if (e.getSource() == addProduct) {
-            System.out.println("addProduct");
             disposeCurrentFrame();
             new AddProductGui();
         }
 
         if (e.getSource() == viewProducts) {
-            System.out.println("viewProducts");
             disposeCurrentFrame();
             new ListProductsGui();
         }
 
         if (e.getSource() == viewOrders) {
-            System.out.println("viewOrders");
             disposeCurrentFrame();
             if (sessionData.getRole().equals("customer")) {
                 new ListOrderGuiCustomer();
@@ -189,18 +185,15 @@ public class MenuGui extends JMenuBar implements ActionListener {
         }
 
         if (e.getSource() == assignOrdersToDrivers) {
-            System.out.println("assignOrdersToDrivers");
             disposeCurrentFrame();
             new ListDriversInfo();
         }
         if (e.getSource() == viewAssignedOrders) {
-            System.out.println("viewAssignedOrders");
             disposeCurrentFrame();
             new ListAssignedOrders();
         }
 
         if (e.getSource() == generateReport) {
-            System.out.println("viewDeliverables");
             disposeCurrentFrame();
             new GenerateReportGui();
         }
@@ -217,15 +210,18 @@ public class MenuGui extends JMenuBar implements ActionListener {
         }
 
         if (e.getSource() == viewDeliverables) {
-            System.out.println("viewDeliverables");
             disposeCurrentFrame();
             new AssignedDeliverableGui();
         }
 
         if (e.getSource() == completeDeliverable) {
-            System.out.println("completeDeliverable");
-//            disposeCurrentFrame();
-//            new CompleteDeliverableGui();
+            disposeCurrentFrame();
+            new DriverCompletedDeliverableGui();
+        }
+
+        if (e.getSource() == changePasswordItem) {
+            disposeCurrentFrame();
+            new ChangePasswordGui();
         }
 
     }
@@ -233,13 +229,5 @@ public class MenuGui extends JMenuBar implements ActionListener {
     private void disposeCurrentFrame() {
         SwingUtilities.getWindowAncestor(this).dispose();
     }
-    // Check the user role and add the corresponding menu
-//        if ("admin".equals(userRole)) {
-//        JMenu adminMenu = new JMenu("Admin");
-//        JMenuItem adminItem = new JMenuItem("Admin Option");
-//        adminMenu.add(adminItem);
-//        add(adminMenu);
-//    }
-
 
 }

@@ -10,7 +10,6 @@ import java.awt.event.*;
 
 public class AddProductGui extends JFrame implements ActionListener {
 
-
     JTextField productName;
     JLabel productNameLabel;
 

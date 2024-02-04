@@ -179,10 +179,9 @@ public class CreateOrderGui extends JFrame implements ActionListener {
             System.out.println(createOrder);
 
             String responseMessage = OrderController.insertCreateOrder(createOrder);
-           // Check the result and show appropriate message
             if (responseMessage.equals("Order created successfully")) {
                 JOptionPane.showMessageDialog(this, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
-                new ListOrderGui();
+                new ListOrderGuiCustomer();
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Error: " + responseMessage, "Error", JOptionPane.ERROR_MESSAGE);
@@ -195,7 +194,6 @@ public class CreateOrderGui extends JFrame implements ActionListener {
     public boolean validation() {
         boolean isValid = true;
         StringBuilder errorMessage = new StringBuilder();
-//        dateChooser.getDate();
         System.out.println(dateChooser.getDate());
 
         if (quantity.getText().isEmpty() || address.getText().isEmpty() || dateChooser.getDate() == null || products.getSelectedItem() == null) {

@@ -81,6 +81,9 @@ public class ListOrderSchedulerGui extends JFrame implements ActionListener{
         //set menu bar
         setJMenuBar(menu);
 
+        //
+        mainPanel.setBackground(new Color(159, 167, 192));
+
         // Add static data to the table
         userOrderData();
 

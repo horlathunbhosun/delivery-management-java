@@ -62,6 +62,8 @@ public class ListDriversInfo extends JFrame {
         //set menu bar
         setJMenuBar(menu);
 
+        mainPanel.setBackground(new Color(159, 167, 192));
+
         // Add static data to the table
         addStaticUserData();
 

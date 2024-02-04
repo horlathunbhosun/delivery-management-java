@@ -108,6 +108,7 @@ public class AssignedDeliverableGui extends JFrame implements ActionListener {
             button.addActionListener(e -> {
                 // Retrieve the orderId from the button's text
                 int orderId = Integer.parseInt(button.getText());
+
                 markOrderCompleted(orderId,button);
             });
         }
@@ -155,21 +156,39 @@ public class AssignedDeliverableGui extends JFrame implements ActionListener {
         // You can open a dialog or perform any other necessary actions here
 
         System.out.println("Order Id: " + orderId);
+
+
+
+
+
+
 //        SessionData sessionData = new SessionData();
 //        sessionData.setUserId(driverId);
 //        SessionManager.createSession("assignOrder", sessionData);
 //        System.out.println(SessionManager.getSession("assignOrder").getUserId());
         // Open the new GUI
-//        SwingUtilities.invokeLater(() -> {
-//            ListOrderSchedulerGui listOrderSchedulerGui = new ListOrderSchedulerGui();
-//            // Assuming that CreateOrderGui extends JFrame
-//            listOrderSchedulerGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            listOrderSchedulerGui.setVisible(true);
-//
-//            // Close the current GUI
-//            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(button);
-//            frame.dispose();
-//        });
+        SwingUtilities.invokeLater(() -> {
+
+            SessionData sessionData = SessionManagerMain.loadUserFromFile();
+
+            String status = OrderController.markOrderAsDelivered(sessionData.getUserId(),orderId);
+
+            if (status.equals("Order marked as delivered successfully")) {
+                JOptionPane.showMessageDialog(null, "Order marked as delivered", "Success", JOptionPane.INFORMATION_MESSAGE);
+                button.setEnabled(false);
+                DriverCompletedDeliverableGui driverCompletedDeliverableGui = new DriverCompletedDeliverableGui();
+                // Assuming that CreateOrderGui extends JFrame
+                driverCompletedDeliverableGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                driverCompletedDeliverableGui.setVisible(true);
+
+                // Close the current GUI
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(button);
+                frame.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: " + status, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
 
 
     }
