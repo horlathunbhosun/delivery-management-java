@@ -1,12 +1,12 @@
-# Goods Delivery Application
+# Delivery Application
 
 ## Project Description
 
 ## How to run the project
 1. Clone the repository
 2. Open the project in your favorite IDE preferably IntelliJ IDEA
-3. create a database in MySQL with the name `goods_delivery`
-4. Run the `goods_delivery.sql` file in the `src/main/resources` folder to create the tables and insert some data
+3. create a database in MySQL with the name `deliver_management`
+4. Run the `deliver_management.sql` file in the `src/main/resources` folder to create the tables and insert some data
 5. Run the `Main` class in the `src/main/java` folder to start the application
 6. You can now register and login as a customer, scheduler or driver
 7. You can create a new delivery as a customer, assign a delivery to a driver as a scheduler and view your deliveries as a driver
