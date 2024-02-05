@@ -33,6 +33,8 @@ public class CreateOrderGui extends JFrame implements ActionListener {
 
     JButton addMore, orderButton;
 
+     String successResponse = "Order created successfully";
+
 
 
     public CreateOrderGui(){
@@ -179,7 +181,7 @@ public class CreateOrderGui extends JFrame implements ActionListener {
             System.out.println(createOrder);
 
             String responseMessage = OrderController.insertCreateOrder(createOrder);
-            if (responseMessage.equals("Order created successfully")) {
+            if (responseMessage.equals(successResponse)) {
                 JOptionPane.showMessageDialog(this, responseMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
                 new ListOrderGuiCustomer();
                 dispose();

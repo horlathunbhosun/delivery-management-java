@@ -468,7 +468,7 @@ public class OrderController {
                     XWPFRun titleRun = titleParagraph.createRun();
                     titleRun.setBold(true);
                     titleRun.setFontSize(16);
-                    titleRun.setText(" THE DAY SELECTED ");
+                    titleRun.setText(dateSelected + " DELIVERIES");
 
                     // Add missions to the document
                     do {
@@ -578,48 +578,6 @@ public class OrderController {
             return null; // or return an empty Vector if you prefer
         }
     }
-
-
-
-//    public static String markOrderAsDelivered(int driverId, int orderId) {
-//        Connection connection = MysqlConnection.getConnection();
-//        // Prepare the SQL statement with placeholders
-//        String sql = "UPDATE orders SET order_status = ? WHERE id = ?";
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-//            // Set values for the placeholders
-//            preparedStatement.setString(1, "delivered");
-//            preparedStatement.setInt(2, orderId);
-//
-//            // Execute the statement
-//            int rowsAffected = preparedStatement.executeUpdate();
-//            System.out.println(rowsAffected + " row(s) affected.");
-//            if (rowsAffected > 0) {
-//                // Prepare the SQL statement to fetch the updated data
-//                String sqfetchSqll = "UPDATE order_delivery SET order_status = ?  WHERE order_id = ? AND driver_id = ?";
-//
-//                try (PreparedStatement fetchStatement = connection.prepareStatement(sqfetchSqll)) {
-//                    fetchStatement.setString(1, "delivered");
-//                    fetchStatement.setInt(2, orderId);
-//                    fetchStatement.setInt(3, driverId);
-//
-//                    int updateRowsAffected = fetchStatement.executeUpdate();
-//                    if (updateRowsAffected > 0) {
-//                        return "Marked Completed Successful";
-//                    } else {
-//                        System.out.println("here1");
-//                        return "Marked completed Failed\n Please Try Again";
-//                    }
-//                }
-//            } else {
-//                System.out.println("here");
-//                return "Marked completed Failed\n Please Try Again";
-//            }
-//        }catch (SQLException e) {
-//            System.out.println("Error: " + e.getMessage());
-//            return "Error: " + e.getMessage();
-//        }
-//    }
-
     public static String markOrderAsDelivered(int driverId, int orderId) {
         Connection connection = MysqlConnection.getConnection();
         // Prepare the SQL statements with placeholders

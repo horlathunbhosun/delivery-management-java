@@ -18,7 +18,6 @@ import java.util.Date;
 
 public class GenerateReportGui extends JFrame implements ActionListener {
 
-
     JLabel dateLabel;
     JDateChooser dateChooser;
 
@@ -67,9 +66,6 @@ public class GenerateReportGui extends JFrame implements ActionListener {
 
         setJMenuBar(menuGui);
         contentPane.setLayout(null);
-
-
-
 
 
         setJMenuBar(menuGui);
