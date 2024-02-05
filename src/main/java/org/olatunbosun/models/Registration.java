@@ -8,9 +8,9 @@ public class Registration {
     private String phoneNumber;
     private String role;
     private String truckNumber;
-    private String truckCapacity;
+    private int truckCapacity;
 
-    public Registration(String fullName, String email, String password, String phoneNumber, String role, String truckNumber, String truckCapacity) {
+    public Registration(String fullName, String email, String password, String phoneNumber, String role, String truckNumber, int truckCapacity) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
@@ -68,11 +68,11 @@ public class Registration {
         this.truckNumber = truckNumber;
     }
 
-    public String getTruckCapacity() {
+    public int getTruckCapacity() {
         return truckCapacity;
     }
 
-    public void setTruckCapacity(String truckCapacity) {
+    public void setTruckCapacity(int truckCapacity) {
         this.truckCapacity = truckCapacity;
     }
 

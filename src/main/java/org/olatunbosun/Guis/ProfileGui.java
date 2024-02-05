@@ -109,7 +109,7 @@ public class ProfileGui extends JFrame  implements ActionListener {
             truckCapacityLabel.setVisible(true);
             truckCapacity = new JTextField();
             truckCapacity.setBounds(120, 300, 250, 50);
-            truckCapacity.setText(String.valueOf(sessionData.getTruckCapacity()));
+            truckCapacity.setText(String.valueOf(sessionData.getTruckCapacity()) + "kg");
             truckCapacity.setVisible(true);
             truckCapacity.setEditable(false);
             contentPane.add(truckNumber);

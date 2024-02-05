@@ -10,7 +10,7 @@ import java.sql.*;
 public class RegistrationController {
 
     //
-    public static String insertData(Registration registration) {
+    public static String insertDataUserInfo(Registration registration) {
         try {
             Connection connection = MysqlConnection.getConnection();
             // Prepare the SQL statement with placeholders
@@ -26,7 +26,7 @@ public class RegistrationController {
                 preparedStatement.setString(4, registration.getPhoneNumber());
                 preparedStatement.setString(5, registration.getRole());
                 preparedStatement.setString(6, registration.getTruckNumber());
-                preparedStatement.setString(7, registration.getTruckCapacity() + "kg");
+                preparedStatement.setInt(7, registration.getTruckCapacity());
                 preparedStatement.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
 
                 // Execute the statement
