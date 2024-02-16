@@ -20,7 +20,6 @@ public class WelcomeScreenGui extends JFrame {
         panel.setLayout(new FlowLayout());
 
         // Add a label to the JPanel
-//        JLabel label = new JLabel("");
         String text = "Welcome to the Delivery Management System";
         JLabel label = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
         panel.add(label);
@@ -44,7 +43,6 @@ public class WelcomeScreenGui extends JFrame {
                 // Open the login page
                 frame.dispose();
                 new LoginScreenGui();
-//                dispose();
             }
         });
         panel.add(loginButton);
