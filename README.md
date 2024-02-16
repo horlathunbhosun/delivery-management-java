@@ -3,6 +3,14 @@
 ## Project Description
 
 ## How to run the project
+### Prerequisites
+- Java 8 or higher
+- MySQL
+- IntelliJ IDEA or any other Java IDE
+- Maven 
+- Git
+- install the following dependencies in the `pom.xml` file
+```xml ```
 1. Clone the repository
 2. Open the project in your favorite IDE preferably IntelliJ IDEA
 3. create a database in MySQL with the name `deliver_management`
